@@ -15,7 +15,7 @@
   <link href="css/blog-home.css" rel="stylesheet">
 </head>
 <body>
-<!-- Navigation -->
+<!-- Navigation. -->
 <jsp:include page="include/navigation.jsp"/>
   <!-- Page Content -->
   <div class="container">
