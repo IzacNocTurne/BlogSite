@@ -1,6 +1,10 @@
 <%@page import="com.cos.util.MyCookie"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<% 
+	String myCookie = MyCookie.getMyCookie(request); 
+	pageContext.setAttribute("myCookie", myCookie);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,9 +28,9 @@
   <!-- Blog Entries Column -->
 	  <div class="col-md-8 my-order">
 		<div class="content-section">
-			<form method="POST" action="#">
+			<form method="POST" action="/BlogSite/member?cmd=loginAction" onsubmit="return loginCheck(this)">
 				<fieldset class="form-group">
-					<legend class="border-bottom mb-4">Join</legend>
+					<legend class="border-bottom mb-4">Login</legend>
 					<div class="form-group">
 							<label class="form-control-label">username</label>
 							<c:choose>
@@ -64,5 +68,6 @@
 	<!-- Bootstrap core JavaScript -->
   <script src="../js/jquery.min.js"></script>
   <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/validation.js"></script>
 </body>
 </html>
