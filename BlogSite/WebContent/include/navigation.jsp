@@ -4,27 +4,27 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-steel fixed-top">
   <div class="container">
-    <a class="navbar-brand" href="/BlogSite/main.jsp">WJ Blog</a>
+    <a class="navbar-brand" href="<%=request.getContextPath()%>/board?cmd=board_list">WJ Blog</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <div class="navbar-nav">
-          <a class="nav-item active nav-link mr-auto" href="/BlogSite/main.jsp">Home
+          <a class="nav-item active nav-link mr-auto" href="<%=request.getContextPath()%>/board?cmd=board_list">Home
             <span class="sr-only">(current)</span>
           </a>
-          <a class="nav-item nav-link" href="/BlogSite/member?cmd=writeForm">New Post</a>
+          <a class="nav-item nav-link" href="<%=request.getContextPath()%>/board/writeForm.jsp">New Post</a>
       </div>
       <div class="navbar-nav ml-auto"> 	  
           <a class="nav-item nav-link" href="#" data-toggle="modal" data-target="#myModal">Contact</a>
           <c:choose>
-          <c:when test="${empty id}">
-          	<a class="nav-item nav-link" href="/BlogSite/member?cmd=loginForm">Login</a>
-          	<a class="nav-item nav-link" href="/BlogSite/member?cmd=joinForm">Register</a>
+          <c:when test="${empty sessionScope.id}">
+          	<a class="nav-item nav-link" href="<%=request.getContextPath()%>/member/loginForm.jsp">Login</a>
+          	<a class="nav-item nav-link" href="<%=request.getContextPath()%>/member/joinForm.jsp">Register</a>
           </c:when>
           <c:otherwise>
-          	<a class="nav-item nav-link" href="/BlogSite/member?cmd=account">Account</a>
-          	<a class="nav-item nav-link" href="/BlogSite/member?cmd=logout">Logout</a>
+          	<a class="nav-item nav-link" href="<%=request.getContextPath()%>/member?cmd=member_account">Account</a>
+          	<a class="nav-item nav-link" href="<%=request.getContextPath()%>/member?cmd=member_logout">Logout</a>
           </c:otherwise>
           </c:choose>
       </div>
@@ -50,7 +50,7 @@
     
         
         <div class="form-group">
-						<textarea class="form-control"></textarea>
+						<textarea class="form-control" autofocus></textarea>
 				</div>
 				</div>
         
