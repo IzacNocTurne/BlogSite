@@ -1,4 +1,4 @@
-package com.cos.controller.member;
+package com.cos.controller.board;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -10,12 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.cos.action.Action;
 import com.cos.action.ActionFactory;
 
-@WebServlet("/member")
-public class MemberController extends HttpServlet {
+@WebServlet("/board")
+public class BoardContoller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static String naming = "MemberController : ";
-
-    public MemberController() {
+	private static final String naming = "BoardContoller : ";
+       
+    public BoardContoller() {
         super();
     }
 
@@ -38,5 +38,6 @@ public class MemberController extends HttpServlet {
 		ActionFactory af=ActionFactory.getInstance();
 		Action action=af.getAction(cmd);
 		if(action != null) action.execute(request, response);
-	}
+	}	
+
 }

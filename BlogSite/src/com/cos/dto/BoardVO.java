@@ -5,9 +5,9 @@ public class BoardVO {
 	private String title;
 	private String content;
 	private String writedate;
-	private String username;
+	private String id;
 	public int getNum() {
-		return num;  
+		return num;
 	}
 	public void setNum(int num) {
 		this.num = num;
@@ -30,10 +30,10 @@ public class BoardVO {
 	public void setWritedate(String writedate) {
 		this.writedate = writedate;
 	}
-	public String getUsername() {
-		return username;
+	public String getId() {
+		return id;
 	}
-	public void setUsername(String username) {
-		this.username = username;
-	} 
-}   
+	public void setId(String id) {
+		this.id = id;
+	}
+}

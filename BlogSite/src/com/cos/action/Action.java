@@ -1,4 +1,4 @@
-package com.cos.controller.member;
+package com.cos.action;
 
 import java.io.IOException;
 
