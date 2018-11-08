@@ -16,19 +16,19 @@ public class JoinAction implements Action{
 	private static String naming = "JoinAction : ";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String url = "/BlogSite/main.jsp";
+		String url = "board?cmd=board_list";
 		
-		MemberVO vo = new MemberVO();
-		vo.setId(request.getParameter("id"));
-		vo.setPassword(request.getParameter("password"));
-		vo.setUsername(request.getParameter("username"));
-		vo.setEmail(request.getParameter("email"));
+		MemberVO member = new MemberVO();
+		member.setId(request.getParameter("id"));
+		member.setPassword(request.getParameter("password"));
+		member.setUsername(request.getParameter("username"));
+		member.setEmail(request.getParameter("email"));
 		
 		MemberDAO dao = new MemberDAO();
-		int result = dao.insert(vo);
+		int result = dao.insert(member);
 		if(result == 1){
 			HttpSession session = request.getSession();
-			session.setAttribute("id", vo.getId());
+			session.setAttribute("id", member.getId());
 			Script.moving(response, "회원가입 성공", url);
 		}else if(result == -1){
 			System.out.println(naming+"sql error");

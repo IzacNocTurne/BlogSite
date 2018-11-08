@@ -39,7 +39,7 @@ h1{color:#333;font-size:14px;letter-spacing:-1px}
 :root  .upload{padding:6px 0 2px 6px;}
 </style>
 
-<script language="javascript">
+<script type="text/javascript">
 	function fn_imageUp() {
 		document.editor_upimage.submit();
 	}

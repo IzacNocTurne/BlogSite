@@ -1,8 +1,8 @@
-<%@page import="com.cos.util.MyCookie"%>
+<%@page import="com.cos.util.MyUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <% 
-	String myCookie = MyCookie.getMyCookie(request); 
+	String myCookie = MyUtil.getMyCookie(request); 
 	pageContext.setAttribute("myCookie", myCookie);
 %>
 <!DOCTYPE html>
@@ -14,9 +14,13 @@
   <meta name="author" content="">
   <title>WJ Blog</title>
   <!-- Bootstrap core CSS -->
-  <link href="../css/bootstrap.css" rel="stylesheet">
+  <link href="<%=request.getContextPath()%>/css/bootstrap.css" rel="stylesheet">
   <!-- Custom styles for this template -->
-  <link href="../css/blog-home.css" rel="stylesheet">
+  <link href="<%=request.getContextPath()%>/css/blog-home.css" rel="stylesheet">
+  <!-- Bootstrap core JavaScript -->
+  <script src="<%=request.getContextPath()%>/js/jquery.min.js"></script>
+  <script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
+  <script src="<%=request.getContextPath()%>/js/validation.js"></script>
 </head>
 <body>
 <!-- Navigation -->
@@ -28,17 +32,17 @@
   <!-- Blog Entries Column -->
 	  <div class="col-md-8 my-order">
 		<div class="content-section">
-			<form method="POST" action="/BlogSite/member?cmd=loginAction" onsubmit="return loginCheck(this)">
+			<form method="POST" action="<%=request.getContextPath()%>/member?cmd=member_login" onsubmit="return loginCheck(this)">
 				<fieldset class="form-group">
 					<legend class="border-bottom mb-4">Login</legend>
 					<div class="form-group">
 							<label class="form-control-label">username</label>
 							<c:choose>
 								<c:when test="${empty myCookie}">
-									<input class="form-control form-control-lg" type="text" name="id" maxlength="20" required>
+									<input class="form-control form-control-lg" type="text" name="id" maxlength="20" required autofocus>
 								</c:when>
 								<c:otherwise>
-									<input class="form-control form-control-lg" type="text" value="${myCookie}" name="id" maxlength="20" required>
+									<input class="form-control form-control-lg" type="text" value="${myCookie}" name="id" maxlength="20" required autofocus>
 								</c:otherwise>
 							</c:choose>
 					</div>
@@ -65,9 +69,5 @@
   <!-- ./row -->
   </div>
 <!-- ./container -->
-	<!-- Bootstrap core JavaScript -->
-  <script src="../js/jquery.min.js"></script>
-  <script src="../js/bootstrap.bundle.min.js"></script>
-  <script src="../js/validation.js"></script>
 </body>
 </html>

@@ -8,9 +8,13 @@
   <meta name="author" content="">
   <title>WJ Blog</title>
   <!-- Bootstrap core CSS -->
-  <link href="../css/bootstrap.css" rel="stylesheet">
+  <link href="<%=request.getContextPath()%>/css/bootstrap.css" rel="stylesheet">
   <!-- Custom styles for this template -->
-  <link href="../css/blog-home.css" rel="stylesheet">
+  <link href="<%=request.getContextPath()%>/css/blog-home.css" rel="stylesheet">
+  <!-- Bootstrap core JavaScript -->
+  <script src="<%=request.getContextPath()%>/js/jquery.min.js"></script>
+  <script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
+  <script src="<%=request.getContextPath()%>/js/validation.js"></script>
 </head>
 <body>
 <!-- Navigation -->
@@ -22,12 +26,12 @@
   <!-- Blog Entries Column -->
 	  <div class="col-md-8 my-order">
 		<div class="content-section">
-			<form method="POST" action="/BlogSite/member?cmd=joinAction" onsubmit="return joinCheck(this)">
+			<form method="POST" action="<%=request.getContextPath()%>/member?cmd=member_join" onsubmit="return joinCheck(this)">
 				<fieldset class="form-group">
 					<legend class="border-bottom mb-4">Join</legend>
 					<div class="form-group">
 							<label class="form-control-label">ID</label>
-							<input class="form-control form-control-lg" type="text" name="id" maxlength="20" required>
+							<input class="form-control form-control-lg" type="text" name="id" maxlength="20" required autofocus>
 					</div>
 					<div class="form-group">
 							<label class="form-control-label">Password</label>
@@ -47,7 +51,7 @@
 					</div>
 					<div class="border-top pt-3">
 				  	<small class="text-muted">
-					  	Already Have An Account? <a class="ml-2" href="/BlogSite/member?cmd=loginForm">login</a>
+					  	Already Have An Account? <a class="ml-2" href="/Blog/member?cmd=loginForm">login</a>
 				  	</small>
 			  	</div>
 					<div class="form-group">
@@ -64,9 +68,5 @@
   <!-- ./row -->
   </div>
 <!-- ./container -->
-	<!-- Bootstrap core JavaScript -->
-  <script src="../js/jquery.min.js"></script>
-  <script src="../js/bootstrap.bundle.min.js"></script>
-  <script src="../js/validation.js"></script>  
 </body>
 </html>
