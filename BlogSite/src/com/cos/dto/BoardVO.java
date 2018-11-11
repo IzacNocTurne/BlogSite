@@ -6,6 +6,8 @@ public class BoardVO {
 	private String content;
 	private String writedate;
 	private String id;
+	private int readcount;
+	
 	public int getNum() {
 		return num;
 	}
@@ -36,4 +38,11 @@ public class BoardVO {
 	public void setId(String id) {
 		this.id = id;
 	}
+	public int getReadcount() {
+		return readcount;
+	}
+	public void setReadcount(int readcount) {
+		this.readcount = readcount;
+	}
+	
 }

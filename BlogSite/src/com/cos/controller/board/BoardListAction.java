@@ -14,17 +14,22 @@ import com.cos.dto.BoardVO;
 import com.cos.util.MyUtil;
 import com.cos.util.Script;
 
-public class ListAction implements Action{
-	private static String naming = "ListAction : ";
+public class BoardListAction implements Action{
+	private static String naming = "BoardListAction : ";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(naming);
 		String url = "main.jsp";
+
+		int pageNum = 0;
+		if(request.getParameter("pageNum") != null){
+			pageNum = Integer.parseInt(request.getParameter("pageNum"));
+		}
 		
 		BoardDAO dao = new BoardDAO();
-		ArrayList<BoardVO> list = dao.select_all();
-		
-		
+		ArrayList<BoardVO> list = dao.select_paging(pageNum);
+		ArrayList<BoardVO> hotPost = dao.hotPost();
+	
 		if(list == null){
 			System.out.println(naming+"sql error");
 			Script.moving(response, "홈페이지 서버 에러");
@@ -33,7 +38,11 @@ public class ListAction implements Action{
 			for(int i=0; i<list.size(); i++){
 				list.get(i).setContent(MyUtil.preview(list.get(i).getContent()));
 			}
+			
 			request.setAttribute("list", list);
+			request.setAttribute("hotPost", hotPost);
+			request.setAttribute("pageNum", pageNum);
+			
 			RequestDispatcher dis = request.getRequestDispatcher(url);
 			dis.forward(request, response);
 		}

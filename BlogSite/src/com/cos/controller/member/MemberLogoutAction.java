@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.cos.action.Action;
 
-public class LogoutAction implements Action{
-	private static String naming = "LogoutAction : ";
+public class MemberLogoutAction implements Action{
+	private static String naming = "MemberLogoutAction : ";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(naming);

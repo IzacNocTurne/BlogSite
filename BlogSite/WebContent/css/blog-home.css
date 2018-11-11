@@ -4,10 +4,8 @@ body {
 	margin-top: 5rem;
 }
 
-textarea {
-	border-radius: 3px;
-	margin-bottom: 20px;
-	margin-top: 20px;
+#viewContent img{
+	max-width:100%;
 }
 
 h1,h2,h3,h4,h5,h6 {

@@ -12,8 +12,8 @@ import com.cos.dao.MemberDAO;
 import com.cos.dto.MemberVO;
 import com.cos.util.Script;
 
-public class JoinAction implements Action{
-	private static String naming = "JoinAction : ";
+public class MemberJoinAction implements Action{
+	private static String naming = "MemberJoinAction : ";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String url = "board?cmd=board_list";

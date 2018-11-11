@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>WJ Blog</title>
+  <title>Cos Blog</title>
   <!-- Bootstrap core CSS -->
   <link href="<%=request.getContextPath()%>/css/bootstrap.css" rel="stylesheet">
   <!-- Custom styles for this template -->
@@ -27,7 +27,7 @@
   <!-- Blog Entries Column -->
 	  <div class="col-md-8 my-order">
 		<div class="content-section">
-			<form method="POST" action="<%=request.getContextPath()%>/member?cmd=member_update" onsubmit="return accountCheck(this)">
+			<form method="POST" action="<%=request.getContextPath()%>/member?cmd=member_updateProc" onsubmit="return accountCheck(this)">
 				<fieldset class="form-group">
 					<legend class="border-bottom mb-4">Update</legend>
 					<div class="form-group">

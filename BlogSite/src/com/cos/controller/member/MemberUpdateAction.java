@@ -13,12 +13,12 @@ import com.cos.dao.MemberDAO;
 import com.cos.dto.MemberVO;
 import com.cos.util.Script;
 
-public class AccountAction implements Action{
-	private static String naming = "AccountAction : ";
+public class MemberUpdateAction implements Action{
+	private static String naming = "MemberUpdateAction : ";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(naming);
-		String url = "member/account.jsp";
+		String url = "member/updateForm.jsp";
 		
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("id");

@@ -1,6 +1,6 @@
+<%@page import="com.cos.dao.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,7 +34,7 @@
           <div class="card-body main">
             <h2 class="card-title">${item.title}</h2>
             <p class="card-text">${item.content}</p>
-            <a href="board?cmd=board_view&num=${item.num}" class="btn btn-primary">Read More &rarr;</a>
+            <a href="<%=request.getContextPath()%>/board?cmd=board_view&num=${item.num}" class="btn btn-primary">Read More &rarr;</a>
           </div>
           <div class="card-footer text-muted">
              Posted on ${item.writedate}
@@ -42,16 +42,52 @@
           </div>
         </div>
 		  </c:forEach>
-
-        <!-- Pagination -->
-        <ul class="pagination justify-content-center mb-4">
-          <li class="page-item">
-            <a class="page-link" href="#">&larr; Older</a>
-          </li>
-          <li class="page-item disabled">
-            <a class="page-link" href="#">Newer &rarr;</a>
-          </li>
-        </ul>
+			
+			
+			<!--  Paging -->
+			<%
+			  int pageNum = 0;
+			  if(request.getAttribute("pageNum") != null){
+				  pageNum = (Integer)request.getAttribute("pageNum");
+			  }
+			  
+			  BoardDAO dao = new BoardDAO();
+				int result = dao.nextPage(pageNum+3);
+				pageContext.setAttribute("result", result);
+			%>
+				<c:choose>
+				<c:when test="${pageNum == 0}">
+	        <ul class="pagination justify-content-center mb-4">
+	          <li class="page-item disabled">
+	            <a class="page-link" href="<%=request.getContextPath()%>/board?cmd=board_list&pageNum=${pageNum-3}">&larr; Prev</a>
+	          </li>
+	          <li class="page-item">
+	            <a class="page-link" href="<%=request.getContextPath()%>/board?cmd=board_list&pageNum=${pageNum+3}">Next &rarr;</a>
+	          </li>
+	        </ul>
+				</c:when>
+				<c:when test="${result == -1}">
+				   <% System.out.println("머지"); %>
+	        <ul class="pagination justify-content-center mb-4">
+	          <li class="page-item">
+	            <a class="page-link" href="<%=request.getContextPath()%>/board?cmd=board_list&pageNum=${pageNum-3}">&larr; Prev</a>
+	          </li>
+	          <li class="page-item disabled">
+	            <a class="page-link" href="<%=request.getContextPath()%>/board?cmd=board_list&pageNum=${pageNum+3}">Next &rarr;</a>
+	          </li>
+	        </ul>				   
+				</c:when>
+				<c:otherwise>
+	        <ul class="pagination justify-content-center mb-4">
+	          <li class="page-item">
+	            <a class="page-link" href="<%=request.getContextPath()%>/board?cmd=board_list&pageNum=${pageNum-3}">&larr; Prev</a>
+	          </li>
+	          <li class="page-item">
+	            <a class="page-link" href="<%=request.getContextPath()%>/board?cmd=board_list&pageNum=${pageNum+3}">Next &rarr;</a>
+	          </li>
+	        </ul>				
+				</c:otherwise>
+				</c:choose>
       </div>
       
       <!-- SideBar -->

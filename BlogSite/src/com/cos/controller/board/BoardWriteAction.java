@@ -11,8 +11,8 @@ import com.cos.dao.BoardDAO;
 import com.cos.dto.BoardVO;
 import com.cos.util.Script;
 
-public class WriteAction implements Action{
-	private static String naming = "WriteAction : ";
+public class BoardWriteAction implements Action{
+	private static String naming = "BoardWriteAction : ";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(naming);

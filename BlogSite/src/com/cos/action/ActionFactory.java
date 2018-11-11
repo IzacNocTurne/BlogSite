@@ -1,13 +1,17 @@
 package com.cos.action;
 
-import com.cos.controller.board.ListAction;
-import com.cos.controller.board.ViewAction;
-import com.cos.controller.board.WriteAction;
-import com.cos.controller.member.AccountAction;
-import com.cos.controller.member.JoinAction;
-import com.cos.controller.member.LoginAction;
-import com.cos.controller.member.LogoutAction;
-import com.cos.controller.member.UpdateAction;
+import com.cos.controller.board.BoardAjaxAction;
+import com.cos.controller.board.BoardDeleteAction;
+import com.cos.controller.board.BoardListAction;
+import com.cos.controller.board.BoardUpdateAction;
+import com.cos.controller.board.BoardUpdateProcAction;
+import com.cos.controller.board.BoardViewAction;
+import com.cos.controller.board.BoardWriteAction;
+import com.cos.controller.member.MemberJoinAction;
+import com.cos.controller.member.MemberLoginAction;
+import com.cos.controller.member.MemberLogoutAction;
+import com.cos.controller.member.MemberUpdateAction;
+import com.cos.controller.member.MemberUpdateProcAction;
 
 public class ActionFactory {
 	private static ActionFactory instance = new ActionFactory();
@@ -22,21 +26,29 @@ public class ActionFactory {
 	
 	public Action getAction(String cmd){
 		if(cmd.equals("board_list")){
-			return new ListAction();
+			return new BoardListAction();
 		}else if(cmd.equals("member_join")) {
-			return new JoinAction();
+			return new MemberJoinAction();
 		}else if(cmd.equals("member_login")) {
-			return new LoginAction();
-		}else if(cmd.equals("member_account")){
-			return new AccountAction();
-		}else if(cmd.equals("member_logout")){
-			return new LogoutAction();
+			return new MemberLoginAction();
 		}else if(cmd.equals("member_update")){
-			return new UpdateAction();
+			return new MemberUpdateAction();
+		}else if(cmd.equals("member_logout")){
+			return new MemberLogoutAction();
+		}else if(cmd.equals("member_updateProc")){
+			return new MemberUpdateProcAction();
 		}else if(cmd.equals("board_write")){
-			return new WriteAction();
+			return new BoardWriteAction();
 		}else if(cmd.equals("board_view")){
-			return new ViewAction();
+			return new BoardViewAction();
+		}else if(cmd.equals("board_delete")){
+			return new BoardDeleteAction();
+		}else if(cmd.equals("board_update")){
+			return new BoardUpdateAction();
+		}else if(cmd.equals("board_updateProc")){
+			return new BoardUpdateProcAction();
+		}else if(cmd.equals("board_ajax")){
+			return new BoardAjaxAction(); 
 		}
 		return null;
 	}

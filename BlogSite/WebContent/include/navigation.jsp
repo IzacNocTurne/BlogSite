@@ -13,17 +13,18 @@
           <a class="nav-item active nav-link mr-auto" href="<%=request.getContextPath()%>/board?cmd=board_list">Home
             <span class="sr-only">(current)</span>
           </a>
-          <a class="nav-item nav-link" href="<%=request.getContextPath()%>/board/writeForm.jsp">New Post</a>
+          <a class="nav-item nav-link" href="#">About</a>
+          <a class="nav-item nav-link" href="#" data-toggle="modal" data-target="#myModal">Contact</a>
       </div>
       <div class="navbar-nav ml-auto"> 	  
-          <a class="nav-item nav-link" href="#" data-toggle="modal" data-target="#myModal">Contact</a>
+          <a class="nav-item nav-link" href="<%=request.getContextPath()%>/board/writeForm.jsp">New Post</a>
           <c:choose>
           <c:when test="${empty sessionScope.id}">
           	<a class="nav-item nav-link" href="<%=request.getContextPath()%>/member/loginForm.jsp">Login</a>
           	<a class="nav-item nav-link" href="<%=request.getContextPath()%>/member/joinForm.jsp">Register</a>
           </c:when>
           <c:otherwise>
-          	<a class="nav-item nav-link" href="<%=request.getContextPath()%>/member?cmd=member_account">Account</a>
+          	<a class="nav-item nav-link" href="<%=request.getContextPath()%>/member?cmd=member_update">Account</a>
           	<a class="nav-item nav-link" href="<%=request.getContextPath()%>/member?cmd=member_logout">Logout</a>
           </c:otherwise>
           </c:choose>

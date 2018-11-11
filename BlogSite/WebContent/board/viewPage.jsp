@@ -32,8 +32,11 @@
 	          <div class="card-body main">
 	          	<!-- Title -->
 	          	<h1 class="mt-4">${board.title}</h1>
-	          	<!-- Author -->
+							<!-- Author -->
         			<p class="lead">by<a href="#">${board.id}</a></p>
+	          	<hr>
+        			<a class="btn btn-warning" href="<%=request.getContextPath()%>/board?cmd=board_update&num=${board.num}">수정</a>
+	          	<a class="btn btn-danger" href="<%=request.getContextPath()%>/board?cmd=board_delete&num=${board.num}">삭제</a>
         			<hr>
         			<!-- Date/Time -->
         			<p>Posted on ${board.writedate}</p>
