@@ -14,7 +14,7 @@ public class MemberLogoutAction implements Action{
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(naming);
-		String url = "board?cmd=board_list";
+		String url = "index.jsp";
 		
 		HttpSession session = request.getSession();
 		session.invalidate();

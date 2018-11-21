@@ -20,7 +20,7 @@
 </head>
 <body>
 <!-- Navigation -->
-<jsp:include page="include/navigation.jsp"/>
+<jsp:include page="/include/navigation.jsp"/>
   <!-- Page Content -->
   <div class="container">
     <div class="row">
@@ -42,7 +42,6 @@
           </div>
         </div>
 		  </c:forEach>
-			
 			
 			<!--  Paging -->
 			<%
@@ -77,6 +76,17 @@
 	          </li>
 	        </ul>				   
 				</c:when>
+				<c:when test="${!empty search}">
+				   <% System.out.println("머지"); %>
+	        <ul class="pagination justify-content-center mb-4">
+	          <li class="page-item disabled">
+	            <a class="page-link" href="#">&larr; Prev</a>
+	          </li>
+	          <li class="page-item disabled">
+	            <a class="page-link" href="#">Next &rarr;</a>
+	          </li>
+	        </ul>				   
+				</c:when>
 				<c:otherwise>
 	        <ul class="pagination justify-content-center mb-4">
 	          <li class="page-item">
@@ -91,11 +101,35 @@
       </div>
       
       <!-- SideBar -->
-      <jsp:include page="include/sidebar.jsp"/>
+      <jsp:include page="/include/sidebar.jsp"/>
     </div>
     <!-- /.row -->
     
   </div>
   <!-- /.container -->
+  
+  <!--  Ajax 핫 Post 확인 -->
+<script>
+	$(document).ready(function(){
+		getAjaxList();
+	});
+		
+	function getAjaxList(){
+		$.ajax({
+			type:"GET",
+			url:"board?cmd=board_ajax",
+			dataType: "json",
+			success:function(data){
+				var list = document.querySelectorAll('.list-group-item');
+				list[0].textContent = '조회'+data[0].readcount+' '+data[0].title;
+				list[1].textContent = '조회'+data[1].readcount+' '+data[1].title;
+				list[2].textContent = '조회'+data[2].readcount+' '+data[2].title;
+			}
+		});
+	}
+	
+	setInterval(getAjaxList,60000); //1분 마다 실행
+</script>
+
 </body>
 </html>

@@ -14,20 +14,20 @@ import com.cos.dto.BoardVO;
 import com.cos.util.MyUtil;
 import com.cos.util.Script;
 
-public class BoardListAction implements Action{
-	private static String naming = "BoardListAction : ";
+public class BoardSearchAction implements Action{
+	private static String naming = "BoardSearchAction : ";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(naming);
 		String url = "main.jsp";
-
-		int pageNum = 0;
-		if(request.getParameter("pageNum") != null){
-			pageNum = Integer.parseInt(request.getParameter("pageNum"));
+		
+		String search = "";
+		if(request.getParameter("search") != null){
+			search = request.getParameter("search");
 		}
 		
 		BoardDAO dao = new BoardDAO();
-		ArrayList<BoardVO> list = dao.select_paging(pageNum);
+		ArrayList<BoardVO> list = dao.search_all(search);
 		ArrayList<BoardVO> hotPost = dao.hotpost();
 	
 		if(list == null){
@@ -39,9 +39,9 @@ public class BoardListAction implements Action{
 				list.get(i).setContent(MyUtil.preview(list.get(i).getContent()));
 			}
 			
+			request.setAttribute("search", true);
 			request.setAttribute("list", list);
 			request.setAttribute("hotPost", hotPost);
-			request.setAttribute("pageNum", pageNum);
 			
 			RequestDispatcher dis = request.getRequestDispatcher(url);
 			dis.forward(request, response);

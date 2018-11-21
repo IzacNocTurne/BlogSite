@@ -35,7 +35,7 @@ public class MemberDAO {
 
 	// select_id
 	public int select_id(MemberVO member) {
-		String SQL = "SELECT id FROM member where id = ? and password= ?";
+		String SQL = "SELECT id FROM member WHERE id = ? AND password= ?";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -55,7 +55,7 @@ public class MemberDAO {
 
 	// select_all
 	public MemberVO select_all(String id) {
-		String SQL = "SELECT id, password, username, email FROM member where id = ?";
+		String SQL = "SELECT id, password, username, email FROM member WHERE id = ?";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -80,7 +80,7 @@ public class MemberDAO {
 	
 	// update
 	public int update(MemberVO member) {
-		String SQL = "UPDATE member SET password = ?, email = ? where id = ?";
+		String SQL = "UPDATE member SET password = ?, email = ? WHERE id = ?";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -95,5 +95,25 @@ public class MemberDAO {
 			DBManager.close(conn, pstmt);
 		}
 		return -1;
+	}
+	
+	public String select_salt(String id){
+		String SQL = "SELECT salt FROM member WHERE id = ?";
+		Connection conn = DBManager.getConnection();
+		try {
+			pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				String salt = rs.getString("salt");
+				return salt;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBManager.close(conn, pstmt, rs);
+		}
+		return null;
 	}	
 }

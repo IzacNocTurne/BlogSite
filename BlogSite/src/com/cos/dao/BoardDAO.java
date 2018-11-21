@@ -33,7 +33,7 @@ public class BoardDAO {
 
 	// select
 	public BoardVO select(int num) {
-		String SQL = "SELECT * FROM board where num = ?";
+		String SQL = "SELECT * FROM board WHERE num = ?";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -59,7 +59,7 @@ public class BoardDAO {
 
 	// select_paging
 	public ArrayList<BoardVO> select_paging(int pageNum) {
-		String SQL = "SELECT * FROM board order by num desc limit ?, 3";
+		String SQL = "SELECT * FROM board ORDER BY num DESC limit ?, 3";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -74,6 +74,7 @@ public class BoardDAO {
 				board.setTitle(rs.getString("title"));
 				board.setContent(rs.getString("content"));
 				board.setWritedate(rs.getString("writedate"));
+				board.setReadcount(rs.getInt("readcount"));
 				list.add(board);
 			}
 			return list;
@@ -85,8 +86,38 @@ public class BoardDAO {
 		return null;
 	}
 
+	// search_all
+	public ArrayList<BoardVO> search_all(String search) {
+		String SQL = "SELECT * FROM board WHERE title LIKE ? ORDER BY num DESC";
+		Connection conn = DBManager.getConnection();
+		try {
+			pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, "%" + search + "%");
+			rs = pstmt.executeQuery();
+
+			ArrayList<BoardVO> list = new ArrayList<>();
+			while (rs.next()) {
+				BoardVO board = new BoardVO();
+				board.setNum(rs.getInt("num"));
+				board.setId(rs.getString("id"));
+				board.setTitle(rs.getString("title"));
+				board.setContent(rs.getString("content"));
+				board.setWritedate(rs.getString("writedate"));
+				board.setReadcount(rs.getInt("readcount"));
+				list.add(board);
+			}
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBManager.close(conn, pstmt, rs);
+		}
+		return null;
+	}
+
+	// nextPage 유무
 	public int nextPage(int pageNum) {
-		String SQL = "SELECT * FROM board order by num desc limit ?, 3";
+		String SQL = "SELECT * FROM board ORDER BY num DESC limit ?, 3";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -104,9 +135,9 @@ public class BoardDAO {
 		return -1;
 	}
 
-	// insert
+	// delete
 	public int delete(int num) {
-		String SQL = "DELETE FROM board where num = ?";
+		String SQL = "DELETE FROM board WHERE num = ?";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -123,7 +154,7 @@ public class BoardDAO {
 
 	// update
 	public int update(BoardVO board) {
-		String SQL = "UPDATE board SET title = ?, content = ? where num = ?";
+		String SQL = "UPDATE board SET title = ?, content = ? WHERE num = ?";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -141,9 +172,9 @@ public class BoardDAO {
 		return -1;
 	}
 
-	// hot post
-	public ArrayList<BoardVO> hotPost() {
-		String SQL = "SELECT num, title, readcount from board order by readcount desc limit 3";
+	// hotpost
+	public ArrayList<BoardVO> hotpost() {
+		String SQL = "SELECT num, title, readcount FROM board ORDER BY readcount DESC limit 3";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -168,7 +199,7 @@ public class BoardDAO {
 
 	// readcount
 	public int readcount(int num) {
-		String SQL = "UPDATE board SET readcount = readcount + 1 where num = ?";
+		String SQL = "UPDATE board SET readcount = readcount + 1 WHERE num = ?";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);

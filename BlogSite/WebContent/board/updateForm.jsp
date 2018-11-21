@@ -21,7 +21,7 @@
 </head>
 <body>
 <!-- Navigation -->
-<jsp:include page="../include/navigation.jsp"/>
+<jsp:include page="/include/navigation.jsp"/>
  
 <div class="container">
 	<!-- Login Form -->

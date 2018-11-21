@@ -13,7 +13,7 @@ import com.cos.action.ActionFactory;
 @WebServlet("/member")
 public class MemberController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static String naming = "MemberController : ";
+	private static String naming = "MemberContoller : ";
 
     public MemberController() {
         super();

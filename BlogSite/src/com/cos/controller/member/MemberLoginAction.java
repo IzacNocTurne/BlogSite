@@ -12,16 +12,22 @@ import com.cos.action.Action;
 import com.cos.dao.MemberDAO;
 import com.cos.dto.MemberVO;
 import com.cos.util.Script;
+import com.cos.util.SHA256;
 
 public class MemberLoginAction implements Action{
 	private static String naming = "MemberLoginAction : ";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String url = "board?cmd=board_list";
+		String url = "index.jsp";
 		
+		MemberDAO dao = new MemberDAO();
 		MemberVO member = new MemberVO();
-		member.setId(request.getParameter("id"));
-		member.setPassword(request.getParameter("password"));
+		
+		String id = request.getParameter("id");
+		String salt = dao.select_salt(id);
+		String password = SHA256.getEncrypt(request.getParameter("password"), salt);
+		member.setId(id);
+		member.setPassword(password);
 		
 		//쿠키저장
 		if(request.getParameter("idsave") != null){
@@ -34,7 +40,6 @@ public class MemberLoginAction implements Action{
 			response.addCookie(cookie); 
 		}
 		
-		MemberDAO dao = new MemberDAO();
 		int result = dao.select_id(member);
 		if(result == 1){
 			HttpSession session = request.getSession();

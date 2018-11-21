@@ -16,7 +16,7 @@ public class BoardWriteAction implements Action{
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(naming);
-		String url = "board?cmd=board_list";
+		String url = "index.jsp";
 		BoardVO board = new BoardVO();
 		board.setId(request.getParameter("id"));
 		board.setTitle(request.getParameter("title"));

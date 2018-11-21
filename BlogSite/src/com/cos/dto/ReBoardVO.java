@@ -1,15 +1,22 @@
 package com.cos.dto;
 
 public class ReBoardVO {
-	private String username;
+	private int renum;
+	private String id;
 	private String recontent;
 	private String wirtedate;
 	private int num;
-	public String getUsername() {
-		return username;
+	public int getRenum() {
+		return renum;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setRenum(int renum) {
+		this.renum = renum;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getRecontent() {
 		return recontent;

@@ -11,6 +11,7 @@ import com.cos.action.Action;
 import com.cos.dao.MemberDAO;
 import com.cos.dto.MemberVO;
 import com.cos.util.Script;
+import com.cos.util.SHA256;
 
 public class MemberUpdateProcAction implements Action{
 	private static String naming = "MemberUpdateAction : ";
@@ -18,12 +19,18 @@ public class MemberUpdateProcAction implements Action{
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String url = "member?cmd=member_update";
 		
-		MemberVO member = new MemberVO();
-		member.setId(request.getParameter("id"));
-		member.setPassword(request.getParameter("password"));
-		member.setEmail(request.getParameter("email"));
-		
 		MemberDAO dao = new MemberDAO();
+		MemberVO member = new MemberVO();
+		
+		String id = request.getParameter("id");		
+		String salt = dao.select_salt(id);
+		String password = SHA256.getEncrypt(request.getParameter("password"), salt);
+		String email = request.getParameter("email");
+		
+		member.setId(id);
+		member.setPassword(password);
+		member.setEmail(email);
+		
 		int result = dao.update(member);
 		if(result == 1){
 			System.out.println(naming+"성공");

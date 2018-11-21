@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +20,7 @@
 
 <body>
 	<!-- Navigation -->
-	<jsp:include page="../include/navigation.jsp"/>
+	<jsp:include page="/include/navigation.jsp"/>
 
   <!-- Page Content -->
   <div class="container">
@@ -48,49 +49,28 @@
 			        <div class="card my-4">
 			          <h5 class="card-header">Leave a Comment:</h5>
 			          <div class="card-body">
-			            <form>
 			              <div class="form-group">
-			                <textarea class="form-control" rows="3"></textarea>
+			                <textarea class="form-control" id="replyData"  rows="3"></textarea>
 			              </div>
-			              <button type="submit" class="btn btn-primary">Submit</button>
-			            </form>
+			              <input type="button" class="btn btn-primary" onclick="sendReply()" value="Submit">
 			          </div>
 			        </div>
-			
-			        <!-- Single Comment -->
-			        <div class="media mb-4">
-			          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-			          <div class="media-body">
-			            <h5 class="mt-0">Commenter Name</h5>
-			            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-			          </div>
-			        </div>
-			
-			        <!-- Comment with nested comments -->
-			        <div class="media mb-4">
-			          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-			          <div class="media-body">
-			            <h5 class="mt-0">Commenter Name</h5>
-			            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-			
-			            <div class="media mt-4">
-			              <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-			              <div class="media-body">
-			                <h5 class="mt-0">Commenter Name</h5>
-			                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-			              </div>
-			            </div>
-			
-			            <div class="media mt-4">
-			              <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-			              <div class="media-body">
-			                <h5 class="mt-0">Commenter Name</h5>
-			                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-			              </div>
-			            </div>
-			
-			          </div>
-			        </div>
+							
+							<div id="reply">
+								<!-- Comment  -->
+								<c:forEach var="item" items="${reboards}">
+					        <div class="media mb-4">
+					          <a href="<%=request.getContextPath()%>/board?cmd=reboard_delete&renum=${item.renum}&num=${item.num}"> 
+					          	<img class="d-flex mr-3 rounded-circle" src="<%=request.getContextPath()%>/img/reply-1.png">
+					          </a>
+					          <div class="media-body">
+					            <h5 class="mt-0">${item.id}</h5>
+					           	${item.recontent}
+					          </div>
+					        </div>
+							  </c:forEach>
+							</div>
+							
 	          </div>
 	   		</div>
    		</div>	
@@ -99,6 +79,55 @@
 
   </div>
   <!-- /.container -->
+<script>
+	function addDiv(renum, num, id, recontent) {  //append 
+		var newDiv = document.createElement("div"); 
+		newDiv.className = 'media mb-4'; 
+		newDiv.innerHTML = "<a href='<%=request.getContextPath()%>/board?cmd=reboard_delete&renum="+renum+"&num="+num+"'><img class='d-flex mr-3 rounded-circle' src='<%=request.getContextPath()%>/img/reply-1.png'><a/> <div class='media-body'> <h5 class='mt-0'>"+id+"</h5>"+recontent+"</div></div>"; 
+		document.getElementById('reply').prepend(newDiv);  //appendChild(newDIv); 
+	}
+
+	function sendReply(){	
+		var replyData = document.getElementById("replyData");	
+		var recontent = replyData.value;
+		var jsonData = {"recontent" : recontent, "id":"${sessionScope.id}", "num":"${board.num}" };
+		var result = JSON.stringify(jsonData);
+		
+		replyData.value = '';
+		
+		$.ajax({
+			type:"POST",
+			url:"board?cmd=reboard_reply",
+			dataType: "text",
+			contentType: 'application/text:charset=utf-8',
+			data: result,
+			success:function(data){
+				var result = JSON.parse(data);
+				addDiv(result.renum, result.num, result.id,result.recontent);
+			},
+			error:function(jqXHR, textStatus, errorThrown){
+      	console.log("에러 발생~~ \n" + textStatus + " : " + errorThrown);
+      }
+		});
+	}
+</script>
 
 </body>
 </html>
+
+<!-- function sendReply(){	
+	var myData = {"key":"jooho"};
+	$.ajax({
+		type:"POST",
+		url:"board",
+		dataType: "json",
+		contentType: 'application/json:charset=utf-8', 
+		data : JSON.stringify(myData),
+		success:function(data){
+			alert('성공');
+		},
+		error:function(jqXHR, textStatus, errorThrown){
+  	alert("에러 발생~~ \n" + textStatus + " : " + errorThrown);
+  }
+	});
+} -->

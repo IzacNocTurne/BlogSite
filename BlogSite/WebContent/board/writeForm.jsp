@@ -8,9 +8,9 @@
   <meta name="author" content="">
   <title>WJ Blog</title>
   <!-- Bootstrap core CSS -->
-  <link href="../css/bootstrap.css" rel="stylesheet">
+  <link href="<%=request.getContextPath()%>/css/bootstrap.css" rel="stylesheet">
   <!-- Custom styles for this template -->
-  <link href="../css/blog-home.css" rel="stylesheet">
+  <link href="<%=request.getContextPath()%>/css/blog-home.css" rel="stylesheet">
 	<!-- Smart Editor -->
 	<script type="text/javascript" src="<%=request.getContextPath()%>/editor/js/HuskyEZCreator.js" charset="utf-8"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/editor/photo_uploader/plugin/hp_SE2M_AttachQuickPhoto.js" charset="utf-8"></script>
@@ -42,7 +42,7 @@
 					</div>
 					<div class="form-group">
 							<label class="form-control-label">Content</label>
-							<!-- <textarea class="form-control" rows="10" cols="50" style="background-image:url('/BlogSite/img/background.png');"></textarea> -->
+							<!-- <textarea class="form-control" rows="10" cols="50" style="background-image:url('/Blog/img/background.png');"></textarea> -->
 					 		<textarea name="content" id="textAreaContent" style="width: 100%" rows="15"  cols="80"></textarea>
 					</div>
 					<div class="form-group">	

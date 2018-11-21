@@ -11,25 +11,31 @@ import com.cos.action.Action;
 import com.cos.dao.MemberDAO;
 import com.cos.dto.MemberVO;
 import com.cos.util.Script;
+import com.cos.util.SHA256;
 
 public class MemberJoinAction implements Action{
 	private static String naming = "MemberJoinAction : ";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String url = "board?cmd=board_list";
+		String url = "gmail/emailSendAction.jsp";
+		
+		String salt = SHA256.generateSalt();;
+		String password = SHA256.getEncrypt(request.getParameter("password"), salt);
 		
 		MemberVO member = new MemberVO();
 		member.setId(request.getParameter("id"));
-		member.setPassword(request.getParameter("password"));
+		member.setPassword(password);
 		member.setUsername(request.getParameter("username"));
 		member.setEmail(request.getParameter("email"));
+		member.setSalt(salt);
+		
 		
 		MemberDAO dao = new MemberDAO();
 		int result = dao.insert(member);
 		if(result == 1){
 			HttpSession session = request.getSession();
 			session.setAttribute("id", member.getId());
-			Script.moving(response, "회원가입 성공", url);
+			Script.moving(response, "구글 이메일 인증", url);
 		}else if(result == -1){
 			System.out.println(naming+"sql error");
 			Script.moving(response, "database 에러");

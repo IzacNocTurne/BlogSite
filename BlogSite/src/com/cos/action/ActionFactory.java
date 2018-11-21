@@ -3,6 +3,7 @@ package com.cos.action;
 import com.cos.controller.board.BoardAjaxAction;
 import com.cos.controller.board.BoardDeleteAction;
 import com.cos.controller.board.BoardListAction;
+import com.cos.controller.board.BoardSearchAction;
 import com.cos.controller.board.BoardUpdateAction;
 import com.cos.controller.board.BoardUpdateProcAction;
 import com.cos.controller.board.BoardViewAction;
@@ -12,6 +13,8 @@ import com.cos.controller.member.MemberLoginAction;
 import com.cos.controller.member.MemberLogoutAction;
 import com.cos.controller.member.MemberUpdateAction;
 import com.cos.controller.member.MemberUpdateProcAction;
+import com.cos.controller.reboard.ReBoardDeleteAction;
+import com.cos.controller.reboard.ReBoardReplyAction;
 
 public class ActionFactory {
 	private static ActionFactory instance = new ActionFactory();
@@ -49,7 +52,13 @@ public class ActionFactory {
 			return new BoardUpdateProcAction();
 		}else if(cmd.equals("board_ajax")){
 			return new BoardAjaxAction(); 
-		}
+		}else if(cmd.equals("board_search")){
+			return new BoardSearchAction();
+		}else if(cmd.equals("reboard_reply")){
+			return new ReBoardReplyAction();
+		}else if(cmd.equals("reboard_delete")){
+			return new ReBoardDeleteAction();
+		}		
 		return null;
 	}
 }

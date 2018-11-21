@@ -19,12 +19,11 @@ public class BoardAjaxAction implements Action{
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(naming);
 		BoardDAO dao = new BoardDAO();
-		ArrayList<BoardVO> hotPost = dao.hotPost();
+		ArrayList<BoardVO> hotPost = dao.hotpost();
 		
 		Gson gson = new Gson();
 		String hotPostJson = gson.toJson(hotPost);
 		System.out.println(naming+hotPostJson);
-		System.out.println("아작스 호출");
 		PrintWriter out = response.getWriter();
 		out.println(hotPostJson);
 	}
