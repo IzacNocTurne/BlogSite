@@ -24,7 +24,7 @@
 </head>
 <body>
 <!-- Navigation -->
-<jsp:include page="../include/navigation.jsp"/>
+<jsp:include page="/include/navigation.jsp"/>
 
 <div class="container">
 	<!-- Login Form -->
@@ -64,7 +64,7 @@
 		</div>
 
 	<!-- SideBar -->
-  <jsp:include page="../include/sidebar.jsp"/>
+  <jsp:include page="/include/sidebar.jsp"/>
   </div>
   <!-- ./row -->
   </div>

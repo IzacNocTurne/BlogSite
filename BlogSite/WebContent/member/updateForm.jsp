@@ -19,7 +19,7 @@
 </head>
 <body>
 <!-- Navigation -->
-<jsp:include page="../include/navigation.jsp"/>
+<jsp:include page="/include/navigation.jsp"/>
 
 <div class="container">
 	<!-- Login Form -->
@@ -36,11 +36,11 @@
 					</div>
 					<div class="form-group">
 							<label class="form-control-label">Password</label>
-							<input class="form-control form-control-lg" type="password" name="password" value="${member.password}" maxlength="20" required autofocus>
+							<input class="form-control form-control-lg" type="password" name="password" value="" maxlength="20" required autofocus>
 					</div>
 					<div class="form-group">
 							<label class="form-control-label">Confirm_password</label>
-							<input class="form-control form-control-lg" type="password" name="confirm" value="${member.password}" maxlength="20" required>
+							<input class="form-control form-control-lg" type="password" name="confirm" value="" maxlength="20" required>
 					</div>
 					<div class="form-group">
 							<label class="form-control-label">Username</label>
@@ -59,7 +59,7 @@
 		</div>
 
 	<!-- SideBar -->
-  <jsp:include page="../include/sidebar.jsp"/>
+  <jsp:include page="/include/sidebar.jsp"/>
   </div>
   <!-- ./row -->
   </div>

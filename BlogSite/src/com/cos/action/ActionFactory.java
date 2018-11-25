@@ -51,14 +51,14 @@ public class ActionFactory {
 		}else if(cmd.equals("board_updateProc")){
 			return new BoardUpdateProcAction();
 		}else if(cmd.equals("board_ajax")){
-			return new BoardAjaxAction(); 
+			return new BoardAjaxAction();
 		}else if(cmd.equals("board_search")){
 			return new BoardSearchAction();
 		}else if(cmd.equals("reboard_reply")){
 			return new ReBoardReplyAction();
 		}else if(cmd.equals("reboard_delete")){
 			return new ReBoardDeleteAction();
-		}		
+		}
 		return null;
 	}
 }

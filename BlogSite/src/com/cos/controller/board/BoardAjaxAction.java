@@ -17,13 +17,12 @@ public class BoardAjaxAction implements Action{
 	private static String naming = "BoardAjaxAction : ";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(naming);
+		//System.out.println(naming);
 		BoardDAO dao = new BoardDAO();
 		ArrayList<BoardVO> hotPost = dao.hotpost();
 		
 		Gson gson = new Gson();
 		String hotPostJson = gson.toJson(hotPost);
-		System.out.println(naming+hotPostJson);
 		PrintWriter out = response.getWriter();
 		out.println(hotPostJson);
 	}

@@ -12,6 +12,7 @@ public class Script {
 			script.println("alert('"+msg+"')");
 			script.println("history.back()");
 			script.println("</script>");
+			script.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -24,6 +25,7 @@ public class Script {
 			script.println("alert('"+msg+"')");
 			script.println("location.href = '"+url+"'");
 			script.println("</script>");
+			script.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
