@@ -29,7 +29,8 @@
 		<div class="content-section">
 			<form method="POST" action="<%=request.getContextPath()%>/member?cmd=member_updateProc" onsubmit="return accountCheck(this)">
 				<fieldset class="form-group">
-					<legend class="border-bottom mb-4">Update</legend>
+					<legend class="border-bottom mb-4">Account</legend>
+					
 					<div class="form-group">
 							<label class="form-control-label">ID</label>
 							<input class="form-control form-control-lg" type="text" name="id" value="${member.id}" maxlength="20" required readonly>
@@ -51,7 +52,10 @@
 							<input class="form-control form-control-lg" type="email" name="email" value="${member.email}" maxlength="20" required>
 					</div>
 					<div class="form-group">
-							<button class="btn btn-outline-info" type="submit">Update</button>
+							<button class="btn btn-outline-info" type="submit">Modified</button>
+							<c:if test="${member.emailcheck == false}">
+								<a href="<%=request.getContextPath()%>/gmail/emailSendAction.jsp" class="btn btn-outline-danger">Authenticate</a>
+							</c:if>
 					</div>		
 				</fieldset>
 			</form>

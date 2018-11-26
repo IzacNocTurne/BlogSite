@@ -18,9 +18,11 @@
 		id = (String)session.getAttribute("id");
 	}
 	
-	boolean emailChecked = dao.select_emailcheck(id);
-	if(emailChecked == true){
+	int emailChecked = dao.select_emailcheck(id);
+	if(emailChecked == 1){
 		Script.moving(response, "이미 인증된 회원입니다.");
+	}else if(emailChecked == -1){
+		Script.moving(response, "데이터베이스 오류");
 	}
 	
 	StringBuffer url = request.getRequestURL();

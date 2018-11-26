@@ -25,6 +25,9 @@ public class MemberLoginAction implements Action{
 		
 		String id = request.getParameter("id");
 		String salt = dao.select_salt(id);
+		if(salt == null){
+			Script.moving(response, "아이디가 존재하지 않습니다.");
+		}
 		String password = SHA256.getEncrypt(request.getParameter("password"), salt);
 		member.setId(id);
 		member.setPassword(password);

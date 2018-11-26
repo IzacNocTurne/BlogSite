@@ -85,14 +85,13 @@ public class BoardDAO {
 		}
 		return null;
 	}
-
-	// search_all
-	public ArrayList<BoardVO> search_all(String search) {
-		String SQL = "SELECT * FROM board WHERE title LIKE ? ORDER BY num DESC";
+	
+	// search
+	public ArrayList<BoardVO> search() {
+		String SQL = "SELECT * FROM board ORDER BY num DESC";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, "%" + search + "%");
 			rs = pstmt.executeQuery();
 
 			ArrayList<BoardVO> list = new ArrayList<>();

@@ -124,6 +124,11 @@ public class MyUtil {
 		return result;
 	}
 	
+	public static String removeTag(String html){
+		html = html.replaceAll("&nbsp;", " ");
+		return html.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+	}
+	
 	public static String HttpCon(String address){
 		try {
 			URL url = new URL(address);

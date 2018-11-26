@@ -35,7 +35,7 @@ public class MemberJoinAction implements Action{
 		if(result == 1){
 			HttpSession session = request.getSession();
 			session.setAttribute("id", member.getId());
-			Script.moving(response, "구글 이메일 인증", url);
+			Script.moving(response, "회원가입 성공 이메일 인증을 진행해주세요.", url);
 		}else if(result == -1){
 			System.out.println(naming+"sql error");
 			Script.moving(response, "database 에러");

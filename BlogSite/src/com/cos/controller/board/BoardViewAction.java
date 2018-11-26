@@ -21,12 +21,11 @@ public class BoardViewAction implements Action{
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(naming);
 		String url = "board/viewPage.jsp";
-		int num = Integer.parseInt(request.getParameter("num"));
-		System.out.println(naming+num);
 		
 		BoardDAO dao = new BoardDAO();
 		ReBoardDAO rdao = new ReBoardDAO();
-		
+	
+		int num = Integer.parseInt(request.getParameter("num"));	
 		int result = dao.readcount(num);
 		if(result == -1){
 			System.out.println(naming+"sql error");

@@ -22,20 +22,20 @@ public class BoardContoller extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		System.out.println(naming+"GET");
+		//System.out.println(naming+"GET");
 		doProcess(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		System.out.println(naming+"POST");
+		//System.out.println(naming+"POST");
 		doProcess(request, response);
 	}
 
 	protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8"); 
 		String cmd = request.getParameter("cmd");
-		System.out.println(naming+cmd);
+		//System.out.println(naming+cmd);
 		ActionFactory af=ActionFactory.getInstance();
 		Action action=af.getAction(cmd);
 		if(action != null) action.execute(request, response);

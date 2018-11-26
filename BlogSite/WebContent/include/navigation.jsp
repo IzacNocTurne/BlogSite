@@ -13,7 +13,7 @@
           <a class="nav-item active nav-link mr-auto" href="<%=request.getContextPath()%>/board?cmd=board_list">Home
             <span class="sr-only">(current)</span>
           </a>
-          <a class="nav-item nav-link" href="#">About</a>
+          <a class="nav-item nav-link" href="<%=request.getContextPath()%>/naver/navermap.jsp">About</a>
           <a class="nav-item nav-link" href="#" data-toggle="modal" data-target="#myModal">Contact</a>
       </div>
       <div class="navbar-nav ml-auto"> 	  

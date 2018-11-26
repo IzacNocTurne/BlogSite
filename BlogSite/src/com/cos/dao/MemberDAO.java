@@ -21,7 +21,7 @@ public class MemberDAO {
 			pstmt.setString(2, member.getPassword());
 			pstmt.setString(3, member.getUsername());
 			pstmt.setString(4, member.getEmail());
-			pstmt.setString(5, member.getSalt());	
+			pstmt.setString(5, member.getSalt());
 			pstmt.executeUpdate();
 			return 1;
 		} catch (Exception e) {
@@ -34,7 +34,7 @@ public class MemberDAO {
 
 	// select_id
 	public int select_id(MemberVO member) {
-		String SQL = "SELECT id FROM member WHERE id = ? AND password= ?";
+		String SQL = "SELECT emailcheck FROM member WHERE id = ? AND password= ?";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -42,8 +42,14 @@ public class MemberDAO {
 			pstmt.setString(2, member.getPassword());
 			rs = pstmt.executeQuery();
 
-			if (rs.next())
-				return 1;
+			if (rs.next()){
+				boolean emailcheck = rs.getBoolean("emailcheck");
+				if(emailcheck == true){
+					return 1;
+				}else{
+					return 2;
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -54,7 +60,7 @@ public class MemberDAO {
 
 	// select_all
 	public MemberVO select_all(String id) {
-		String SQL = "SELECT id, password, username, email FROM member WHERE id = ?";
+		String SQL = "SELECT id, password, username, email, emailcheck FROM member WHERE id = ?";
 		Connection conn = DBManager.getConnection();
 		try {
 			pstmt = conn.prepareStatement(SQL);
@@ -66,6 +72,7 @@ public class MemberDAO {
 				member.setId(rs.getString("id"));
 				member.setUsername(rs.getString("username"));
 				member.setEmail(rs.getString("email"));
+				member.setEmailcheck(rs.getBoolean("emailcheck"));
 				return member;
 			}
 		} catch (Exception e) {
@@ -131,7 +138,7 @@ public class MemberDAO {
 		return -1;
 	}
 	
-	public boolean select_emailcheck(String id){
+	public int select_emailcheck(String id){
 		String SQL = "SELECT emailcheck FROM member where id =?";
 		Connection conn = DBManager.getConnection();
 		try {
@@ -140,14 +147,18 @@ public class MemberDAO {
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				boolean emailcheck = rs.getBoolean("emailcheck");
-				return emailcheck;
+				if(emailcheck == true){
+					return 1;
+				}else{
+					return 2;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			DBManager.close(conn, pstmt);
 		}
-		return false;
+		return -1;
 	}
 	
 	public String select_email(String id){
