@@ -56,9 +56,7 @@
   <!-- ./row -->
 </div>
 <!-- ./container -->
-<script type="text/javascript">
 
-</script>
 <!-- Naver Smart Editor 2 -->
 <script>
   var form = document.w_form;

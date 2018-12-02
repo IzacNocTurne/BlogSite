@@ -1,4 +1,4 @@
-package com.cos.controller.board;
+package com.cos.admin;
 
 import java.io.IOException;
 
@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.cos.action.Action;
 import com.cos.action.ActionFactory;
 
-@WebServlet("/board")
-public class BoardContoller extends HttpServlet {
+@WebServlet("/admin")
+public class AdminContoller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	//private static final String naming = "BoardContoller : ";
+	//private static final String naming = "AdminContoller : ";
        
-    public BoardContoller() {
+    public AdminContoller() {
         super();
     }
 

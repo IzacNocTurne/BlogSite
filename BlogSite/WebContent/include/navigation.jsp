@@ -34,33 +34,52 @@
 </nav>
 
 <!-- The Modal -->
-  <div class="modal fade" id="myModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      
-      <form method="POST" action="#">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Send SMS</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
-          Put the Message
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
     
-        
-        <div class="form-group">
-						<textarea class="form-control" autofocus></textarea>
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Send SMS</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+				Put the Message
+      	<div class="form-group">
+					<textarea class="form-control" id="msg"></textarea>
 				</div>
-				</div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-        	<button type="submit" class="btn btn-info" data-dismiss="modal">Send</button>
-          <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-        </div>
-        </form>
+			</div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+      		<button type="button" class="btn btn-info" data-dismiss="modal" onclick="sendAjaxSMS()">Send</button>
+        	<button type="button" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
+</div>
+ 
+ <!--  SMS -->
+<script>
+function sendAjaxSMS(){	
+	var msgElement = document.getElementById("msg");
+	var msg = msgElement.value;
+	msgElement.value = '';
+	
+	$.ajax({
+		type:"POST",
+		url:"admin?cmd=admin_sms",
+		dataType: "text",
+		contentType: 'application/text:charset=utf-8',
+		data: msg,
+		success:function(data){
+			alert(data);
+		},
+		error:function(jqXHR, textStatus, errorThrown){
+  	console.log("에러 발생~~ \n" + textStatus + " : " + errorThrown);
+  }
+	});
+}
+</script>

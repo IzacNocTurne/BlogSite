@@ -1,5 +1,6 @@
 package com.cos.action;
 
+import com.cos.admin.SMSSendAction;
 import com.cos.controller.board.BoardAjaxAction;
 import com.cos.controller.board.BoardDeleteAction;
 import com.cos.controller.board.BoardListAction;
@@ -28,7 +29,9 @@ public class ActionFactory {
 	}
 	
 	public Action getAction(String cmd){
-		if(cmd.equals("board_list")){
+		if(cmd == null){
+			return new BoardListAction();
+		}else if(cmd.equals("board_list")){
 			return new BoardListAction();
 		}else if(cmd.equals("member_join")) {
 			return new MemberJoinAction();
@@ -58,6 +61,8 @@ public class ActionFactory {
 			return new ReBoardReplyAction();
 		}else if(cmd.equals("reboard_delete")){
 			return new ReBoardDeleteAction();
+		}else if(cmd.equals("admin_sms")){
+			return new SMSSendAction();
 		}
 		return null;
 	}

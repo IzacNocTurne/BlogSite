@@ -14,7 +14,7 @@ import com.cos.dto.BoardVO;
 import com.google.gson.Gson;
 
 public class BoardAjaxAction implements Action{
-	private static String naming = "BoardAjaxAction : ";
+	//private static String naming = "BoardAjaxAction : ";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//System.out.println(naming);

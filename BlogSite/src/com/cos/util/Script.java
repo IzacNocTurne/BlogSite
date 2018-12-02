@@ -30,4 +30,16 @@ public class Script {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void alert(HttpServletResponse response, String msg){
+		try {
+			PrintWriter script = response.getWriter();
+			script.println("<script>");
+			script.println("alert('"+msg+"')");
+			script.println("</script>");
+			script.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

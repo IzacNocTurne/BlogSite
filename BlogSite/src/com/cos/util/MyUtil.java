@@ -57,11 +57,15 @@ public class MyUtil {
 		//img_tag
 		boolean img_vacant = true;
 		
+		//iframe_tag
+		boolean iframe_vacant = true;
+		
 		Document doc = Jsoup.parse(content);
 		Elements p_tag = doc.select("p");	
 		Elements div_tag = doc.select("div");
 		Elements span_tag = doc.select("span");
 		Elements img_tag = doc.select("img");
+		Elements iframe_tag = doc.select("iframe");
 		
 		for(int i=0; i<p_tag.size(); i++){
 			p_vacant = false;
@@ -96,9 +100,15 @@ public class MyUtil {
 			}
 		}
 		
+		
 		if(img_tag.size() > 0){
 			img_vacant = false;
 		}
+		
+		if(iframe_tag.size() > 0){
+			iframe_vacant = false;
+		}
+		
 		
 		if(p_vacant == false){
 			result = doc.select("p").eq(p_index).text();
@@ -108,6 +118,8 @@ public class MyUtil {
 			result = doc.select("span").eq(span_index).text();
 		}else if(img_vacant == false){
 			result = "본문에 이미지만 존재합니다.";
+		}else if(iframe_vacant == false){
+			result = "본문에 영상만 존재합니다.";
 		}else{
 			result = content;
 			if(result.equals("<br>") || result.contains("&nbsp")){

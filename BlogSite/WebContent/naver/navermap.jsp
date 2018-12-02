@@ -1,4 +1,9 @@
+<%@page import="com.cos.dao.SecretDAO"%>
+<%@page import="com.cos.dto.SecretVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+	SecretVO secret = new SecretDAO().getSecret("naver");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +23,7 @@
   <script src="<%=request.getContextPath()%>/js/jquery.min.js"></script>
   <script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
   <script src="<%=request.getContextPath()%>/js/validation.js"></script>
-  <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=fXTTZsAX4gQL_nf4W10W&submodules=geocoder"></script>
+  <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=<%=secret.getApikey() %>&submodules=geocoder"></script>
 </head>
 <body>
 <!-- Navigation -->
@@ -38,7 +43,7 @@
 	 <div id="map" style="width:100%;height:400px;"></div>
 	    <script>
 	      var map = new naver.maps.Map('map');
-	      var myaddress = '영통로498';// 도로명 주소나 지번 주소만 가능 (건물명 불가!!!!)
+	      var myaddress = '경기 수원시 팔달구 매산로2가';// 도로명 주소나 지번 주소만 가능 (건물명 불가!!!!)
 	      naver.maps.Service.geocode({address: myaddress}, function(status, response) {
 	          if (status !== naver.maps.Service.Status.OK) {
 	              return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
