@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.cos.action.Action;
 import com.cos.dao.BoardDAO;
+import com.cos.dao.ReBoardDAO;
 import com.cos.util.Script;
 
 public class BoardDeleteAction implements Action{
@@ -21,6 +22,8 @@ public class BoardDeleteAction implements Action{
 		int result = dao.delete(num);
 		
 		if(result == 1){
+			ReBoardDAO rdao = new ReBoardDAO();
+			rdao.delete_num(num);
 			Script.moving(response, "삭제 성공", url);
 		}else if(result == -1){
 			System.out.println(naming+"sql error");

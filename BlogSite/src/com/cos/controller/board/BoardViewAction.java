@@ -8,11 +8,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jsoup.Jsoup;
+
 import com.cos.action.Action;
 import com.cos.dao.BoardDAO;
 import com.cos.dao.ReBoardDAO;
 import com.cos.dto.BoardVO;
 import com.cos.dto.ReBoardVO;
+import com.cos.util.MyUtil;
 import com.cos.util.Script;
 
 public class BoardViewAction implements Action{
@@ -33,6 +36,9 @@ public class BoardViewAction implements Action{
 		}
 		
 		BoardVO board = dao.select(num);
+		
+		//Jsoup.
+		
 		ArrayList<ReBoardVO> reboards = rdao.select_all(num);
 		
 		if(board == null){
@@ -40,6 +46,7 @@ public class BoardViewAction implements Action{
 			Script.moving(response, "database 에러");
 		}else{
 			request.setAttribute("board", board);
+			board.setContent(MyUtil.makeYoutube(board.getContent()));
 			request.setAttribute("reboards", reboards);
 			RequestDispatcher dis = request.getRequestDispatcher(url);
 			dis.forward(request, response);

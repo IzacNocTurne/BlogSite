@@ -96,4 +96,21 @@ public class ReBoardDAO {
 		}
 		return -1;
 	}
+	
+	// delete_boardnum
+	public int delete_num(int num) {
+		String SQL = "DELETE FROM reboard WHERE num = ?";
+		Connection conn = DBManager.getConnection();
+		try {
+			pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBManager.close(conn, pstmt);
+		}
+		return -1;
+	}
 }

@@ -2,6 +2,7 @@ package com.cos.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.Character.UnicodeBlock;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -29,118 +30,47 @@ public class MyUtil {
 		return cookieID;
 	}
 	
+	//크로스 사이트 스크립트 공격 방어
 	public static String getReplace(String code) {	
 		return code.replaceAll(" ", "&nbsp;").replaceAll("<", "&lt").replaceAll(">", "&gt").replaceAll("\n", "<br>");
 	}
 	
+	//미리보기 화면을 위한 함수
 	public static String preview(String content){
-		String result = "";
-		
-		//p_tag
-		String p_value = "";
-		int p_length = 0;
-		int p_index = 0;
-		boolean p_vacant = true;
-		
-		//div_tag
-		String div_value = "";
-		int div_length = 0;
-		int div_index = 0;
-		boolean div_vacant = true;
-		
-		//span_tag
-		String span_value = "";
-		int span_length = 0;
-		int span_index = 0;
-		boolean span_vacant = true;
-		
-		//img_tag
-		boolean img_vacant = true;
-		
-		//iframe_tag
-		boolean iframe_vacant = true;
 		
 		Document doc = Jsoup.parse(content);
-		Elements p_tag = doc.select("p");	
-		Elements div_tag = doc.select("div");
-		Elements span_tag = doc.select("span");
 		Elements img_tag = doc.select("img");
 		Elements iframe_tag = doc.select("iframe");
 		
-		for(int i=0; i<p_tag.size(); i++){
-			p_vacant = false;
-			p_value = doc.select("p").eq(i).text();
-			if(p_length < p_value.length()){
-				p_length = p_value.length();
-				if(!p_value.equals("")){
-					p_index = i;
-				}
+		String remove_content = removeTag(content);
+
+		if(remove_content.length() == 0){
+			if(img_tag.size() > 0 && iframe_tag.size() > 0){
+				remove_content = "본문에 이미지와 영상만 존재합니다.";
+			}else if((img_tag.size() > 0 && iframe_tag.size() == 0)){
+				remove_content = "본문에 이미지만 존재합니다.";
+			}else if((img_tag.size() == 0 && iframe_tag.size() > 0)){
+				remove_content = "본문에 영상만 존재합니다.";
+			}else{
+				remove_content = "본문에 내용이 존재하지 않습니다.";
 			}
-		}
-		
-		for(int i=0; i<div_tag.size(); i++){
-			div_vacant = false;
-			div_value = doc.select("div").eq(i).text();
-			if(div_length < div_value.length()){
-				div_length = div_value.length();
-				if(!div_value.equals("")){
-					div_index = i;
-				}
-			}
-		}
-		
-		for(int i=0; i<span_tag.size(); i++){
-			span_vacant = false;
-			span_value = doc.select("span").eq(i).text();
-			if(span_length < span_value.length()){
-				span_length = span_value.length();
-				if(!span_value.equals("")){
-					span_index = i;
-				}
-			}
-		}
-		
-		
-		if(img_tag.size() > 0){
-			img_vacant = false;
-		}
-		
-		if(iframe_tag.size() > 0){
-			iframe_vacant = false;
-		}
-		
-		
-		if(p_vacant == false){
-			result = doc.select("p").eq(p_index).text();
-		}else if(div_vacant == false){
-			result = doc.select("div").eq(div_index).text();
-		}else if(span_vacant == false){
-			result = doc.select("span").eq(span_index).text();
-		}else if(img_vacant == false){
-			result = "본문에 이미지만 존재합니다.";
-		}else if(iframe_vacant == false){
-			result = "본문에 영상만 존재합니다.";
 		}else{
-			result = content;
-			if(result.equals("<br>") || result.contains("&nbsp")){
-				result = "";
-			}
-		}
+			//한줄에 영어만 하면 73줄, 한글로만 하면 50줄!!
+			if(remove_content.length() > 50){
+				remove_content = remove_content.substring(0, 50);
+			}	
+		}	
 		
-		//한줄에 43줄!!
-		if(result.length() > 86){
-			result = result.substring(0, 80);
-			result += ".....";
-		}
-		
-		return result;
+		return remove_content;
 	}
 	
+	//모든 HTML 태그 제거
 	public static String removeTag(String html){
 		html = html.replaceAll("&nbsp;", " ");
 		return html.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
 	}
 	
+	// 자바 http 요청
 	public static String HttpCon(String address){
 		try {
 			URL url = new URL(address);
@@ -161,4 +91,44 @@ public class MyUtil {
 		}
 		return null;
 	}	
+	
+	public static String makeYoutube(String content){
+	    Document doc = Jsoup.parse(content);
+	    Elements a_tag = doc.select("a");
+	    
+	    String iFrame="";
+	    
+	    System.out.println(a_tag.size());
+	    for(int i=0; i< a_tag.size(); i++){
+	    	if(a_tag.get(i).attr("href").contains("www.youtube.com/watch")){
+		    	System.out.println("영상 링크가 존재합니다.");
+		    	String href = a_tag.get(i).attr("href");
+		    	String sp[] = href.split("=");
+		    	String value = sp[1];
+		    	iFrame = "<iframe id=\"player\" type=\"text/html\" width=\"726\" height=\"409\" src=\"http://www.youtube.com/embed/"+value+"\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>";
+		    	a_tag.get(i).after(iFrame);
+		    }   
+	    }
+	    
+	    
+	    System.out.println(doc);
+	    return doc.toString();
+	}
+	
+	//자바 한글 검출기
+    public static boolean containsHangul(String str)
+    {
+        for ( int i = 0 ; i < str.length( ) ; i++ )
+        {
+            char ch = str.charAt( i );
+            Character.UnicodeBlock unicodeBlock = Character.UnicodeBlock.of( ch );
+            if ( UnicodeBlock.HANGUL_SYLLABLES.equals( unicodeBlock ) || 
+                    UnicodeBlock.HANGUL_COMPATIBILITY_JAMO.equals( unicodeBlock )
+                    || UnicodeBlock.HANGUL_JAMO.equals( unicodeBlock ) )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

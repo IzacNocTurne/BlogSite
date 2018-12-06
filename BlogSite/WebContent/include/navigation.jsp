@@ -4,13 +4,13 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-steel fixed-top">
   <div class="container">
-    <a class="navbar-brand" href="<%=request.getContextPath()%>/board?cmd=board_list">WJ Blog</a>
+    <a class="navbar-brand" href="<%=request.getContextPath()%>/board">WJ Blog</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <div class="navbar-nav">
-          <a class="nav-item active nav-link mr-auto" href="<%=request.getContextPath()%>/board?cmd=board_list">Home
+          <a class="nav-item active nav-link mr-auto" href="<%=request.getContextPath()%>/board">Home
             <span class="sr-only">(current)</span>
           </a>
           <a class="nav-item nav-link" href="<%=request.getContextPath()%>/naver/navermap.jsp">About</a>

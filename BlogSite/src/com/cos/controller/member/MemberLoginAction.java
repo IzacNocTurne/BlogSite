@@ -42,15 +42,19 @@ public class MemberLoginAction implements Action{
 			cookie.setMaxAge(0);
 			response.addCookie(cookie); 
 		}
-		
+
 		int result = dao.select_id(member);
 		if(result == 1){
 			HttpSession session = request.getSession();
 			session.setAttribute("id", member.getId());
 			Script.moving(response, "로그인 성공", url);
-		}else if(result == -1){
+		}else if(result == 2){
+			HttpSession session = request.getSession();
+			session.setAttribute("id", member.getId());
+			Script.moving(response, "미인증 회원입니다. 글쓰기가 제한됩니다.", url);
+		}else{
 			System.out.println(naming+"sql error");
-			Script.moving(response, "database 에러");
+			Script.moving(response, "비밀번호를 확인하세요.");
 		}
 	}
 }

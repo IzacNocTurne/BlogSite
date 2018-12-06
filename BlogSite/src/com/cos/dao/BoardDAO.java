@@ -142,6 +142,7 @@ public class BoardDAO {
 			pstmt = conn.prepareStatement(SQL);
 			pstmt.setInt(1, num);
 			pstmt.executeUpdate();
+			
 			return 1;
 		} catch (Exception e) {
 			e.printStackTrace();

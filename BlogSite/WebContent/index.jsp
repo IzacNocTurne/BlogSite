@@ -13,7 +13,7 @@
 <body>
   <!-- email 인증, naver login, naver map, youtube link, image upload, sms service, kakao 플러스 친구(관리자 모드), 구글 분석모드, 아마존(도커)  -->
 	<script>
-		location.href = 'board?cmd=board_list';
+		location.href = 'board';
 	</script>
 </body>
 </html>

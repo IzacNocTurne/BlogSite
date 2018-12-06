@@ -54,7 +54,15 @@
 			              <div class="form-group">
 			                <textarea class="form-control" id="replyData"  rows="3"></textarea>
 			              </div>
-			              <input type="button" class="btn btn-primary" onclick="sendReply()" value="Submit">
+			              <c:choose>
+			              	<c:when test="${empty sessionScope.id}">
+			              		<input type="button" class="btn btn-primary" onclick="alert('로그인 후 이용가능합니다.')" value="Submit">
+			              	</c:when>
+			              	<c:otherwise>
+			              		<input type="button" class="btn btn-primary" onclick="sendReply()" value="Submit">
+			              	</c:otherwise>
+			              </c:choose>
+			              
 			          </div>
 			        </div>
 							
@@ -62,9 +70,16 @@
 								<!-- Comment  -->
 								<c:forEach var="item" items="${reboards}">
 					        <div class="media mb-4">
-					          <a href="<%=request.getContextPath()%>/board?cmd=reboard_delete&renum=${item.renum}&num=${item.num}"> 
-					          	<img class="d-flex mr-3 rounded-circle" src="<%=request.getContextPath()%>/img/reply-1.png">
-					          </a>
+					          <c:choose>
+					          <c:when test="${item.id == sessionScope.id}">
+						          <a href="<%=request.getContextPath()%>/board?cmd=reboard_delete&renum=${item.renum}&num=${item.num}"> 
+						          	<img class="d-flex mr-3 rounded-circle" src="<%=request.getContextPath()%>/img/clear.png">
+						          </a>
+					          </c:when>
+					          <c:otherwise>
+					          	<img class="d-flex mr-3 rounded-circle" src="<%=request.getContextPath()%>/img/reply.png">
+					          </c:otherwise>
+					          </c:choose>
 					          <div class="media-body">
 					            <h5 class="mt-0">${item.id}</h5>
 					           	${item.recontent}
@@ -85,13 +100,17 @@
 	function addDiv(renum, num, id, recontent) {  //append 
 		var newDiv = document.createElement("div"); 
 		newDiv.className = 'media mb-4'; 
-		newDiv.innerHTML = "<a href='<%=request.getContextPath()%>/board?cmd=reboard_delete&renum="+renum+"&num="+num+"'><img class='d-flex mr-3 rounded-circle' src='<%=request.getContextPath()%>/img/reply-1.png'><a/> <div class='media-body'> <h5 class='mt-0'>"+id+"</h5>"+recontent+"</div></div>"; 
+		newDiv.innerHTML = "<a href='<%=request.getContextPath()%>/board?cmd=reboard_delete&renum="+renum+"&num="+num+"'><img class='d-flex mr-3 rounded-circle' src='<%=request.getContextPath()%>/img/clear.png'><a/> <div class='media-body'> <h5 class='mt-0'>"+id+"</h5>"+recontent+"</div></div>"; 
 		document.getElementById('reply').prepend(newDiv);  //appendChild(newDIv); 
 	}
 
 	function sendReply(){	
 		var replyData = document.getElementById("replyData");	
 		var recontent = replyData.value;
+		if(recontent == ''){
+			alert('글을 입력하세요.');
+			return false;
+		}
 		var jsonData = {"recontent" : recontent, "id":"${sessionScope.id}", "num":"${board.num}" };
 		var result = JSON.stringify(jsonData);
 		

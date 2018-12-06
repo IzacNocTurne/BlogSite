@@ -34,7 +34,11 @@ public class BoardContoller extends HttpServlet {
 
 	protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8"); 
-		String cmd = request.getParameter("cmd");
+		String cmd = null;
+		if(request.getParameter("cmd") != null){
+			cmd = request.getParameter("cmd");
+		}
+		
 		//System.out.println(naming+cmd);
 		ActionFactory af=ActionFactory.getInstance();
 		Action action=af.getAction(cmd);
