@@ -1,6 +1,6 @@
 package com.cos.controller.board;
 
-import java.io.IOException;
+import java.io.IOException; 
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,11 +12,11 @@ import com.cos.action.Action;
 import com.cos.action.ActionFactory;
 
 @WebServlet("/board")
-public class BoardContoller extends HttpServlet {
+public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	//private static final String naming = "BoardContoller : ";
+	//private static final String naming = "BoardController : ";
        
-    public BoardContoller() {
+    public BoardController() {
         super();
     }
 

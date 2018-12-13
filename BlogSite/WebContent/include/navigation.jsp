@@ -55,7 +55,7 @@
       <!-- Modal footer -->
       <div class="modal-footer">
       		<button type="button" class="btn btn-info" data-dismiss="modal" onclick="sendAjaxSMS()">Send</button>
-        	<button type="button" data-dismiss="modal">Close</button>
+        	<button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -78,7 +78,7 @@ function sendAjaxSMS(){
 			alert(data);
 		},
 		error:function(jqXHR, textStatus, errorThrown){
-  	console.log("에러 발생~~ \n" + textStatus + " : " + errorThrown);
+  	console.log("에러발생~~ \n" + textStatus + " : " + errorThrown);
   }
 	});
 }

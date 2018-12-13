@@ -46,7 +46,13 @@ public class BoardViewAction implements Action{
 			Script.moving(response, "database 에러");
 		}else{
 			request.setAttribute("board", board);
+			
+			//유튜브 영상 걸러내기
 			board.setContent(MyUtil.makeYoutube(board.getContent()));
+			
+			//네이버 지도 걸러내기 규칙은 /nmap/중앙대로 708/nmap/ 형태로 데이터 입력해야함.
+			board.setContent(MyUtil.makeNavermap(board.getContent()));
+			
 			request.setAttribute("reboards", reboards);
 			RequestDispatcher dis = request.getRequestDispatcher(url);
 			dis.forward(request, response);

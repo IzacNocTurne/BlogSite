@@ -1,5 +1,10 @@
+<%@page import="com.cos.dao.SecretDAO"%>
+<%@page import="com.cos.dto.SecretVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	SecretVO secret = new SecretDAO().getSecret("naver");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +20,7 @@
 	 <!-- Bootstrap core JavaScript -->
   <script src="<%=request.getContextPath()%>/js/jquery.min.js"></script>
   <script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
-	
+  <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=<%=secret.getApikey() %>&submodules=geocoder"></script>
 </head>
 
 <body>

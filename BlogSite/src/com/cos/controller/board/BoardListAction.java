@@ -36,7 +36,7 @@ public class BoardListAction implements Action{
 		}else{
 			//main 페이지에 미리볼 수 있는 content 만들기 (이미지 제거)
 			for(int i=0; i<list.size(); i++){
-				list.get(i).setContent(MyUtil.preview(list.get(i).getContent()));
+				list.get(i).setContent(MyUtil.preview(list.get(i).getContent().replaceAll("/nmap/", "")));
 			}
 			
 			request.setAttribute("list", list);

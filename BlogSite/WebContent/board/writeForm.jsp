@@ -41,7 +41,7 @@
 							<input class="form-control form-control-lg" type="text" name="title" autofocus>
 					</div>
 					<div class="form-group">
-							<label class="form-control-label">Content</label>
+							<label class="form-control-label">Content 지도첨부 /nmap/경기 수원시 팔달구 매산로2가/nmap/</label>
 							<!-- <textarea class="form-control" rows="10" cols="50" style="background-image:url('/Blog/img/background.png');"></textarea> -->
 					 		<textarea name="content" id="textAreaContent" style="width: 100%" rows="15"  cols="80"></textarea>
 					</div>
@@ -88,6 +88,5 @@
       oEditors.getById["textAreaContent"].exec("PASTE_HTML", [sHTML]);
   }
 </script>
-
 </body>
 </html>

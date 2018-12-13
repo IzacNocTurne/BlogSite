@@ -16,14 +16,11 @@
   <link href="<%=request.getContextPath()%>/css/bootstrap.css" rel="stylesheet">
   <!-- Custom styles for this template -->
   <link href="<%=request.getContextPath()%>/css/blog-home.css" rel="stylesheet">
-	<!-- Smart Editor -->
-	<script type="text/javascript" src="<%=request.getContextPath()%>/editor/js/HuskyEZCreator.js" charset="utf-8"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/editor/photo_uploader/plugin/hp_SE2M_AttachQuickPhoto.js" charset="utf-8"></script>
-	<!-- Bootstrap core JavaScript -->
+  <!-- Bootstrap core JavaScript -->
   <script src="<%=request.getContextPath()%>/js/jquery.min.js"></script>
   <script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
   <script src="<%=request.getContextPath()%>/js/validation.js"></script>
-  <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=<%=secret.getApikey() %>&submodules=geocoder"></script>
+  <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=<%=secret.getApikey()%>&submodules=geocoder"></script>
 </head>
 <body>
 <!-- Navigation -->
@@ -31,7 +28,7 @@
  
 <div class="container">
 	  <h2>오시는길</h2>
-	  <h6>수원역</h6> 
+	  <h6>우리집</h6> 
 </div>
 
 <div class="container">
@@ -43,7 +40,7 @@
 	 <div id="map" style="width:100%;height:400px;"></div>
 	    <script>
 	      var map = new naver.maps.Map('map');
-	      var myaddress = '경기 수원시 팔달구 매산로2가';// 도로명 주소나 지번 주소만 가능 (건물명 불가!!!!)
+	      var myaddress = '영통로 498';// 도로명 주소나 지번 주소만 가능 (건물명 불가!!!!)
 	      naver.maps.Service.geocode({address: myaddress}, function(status, response) {
 	          if (status !== naver.maps.Service.Status.OK) {
 	              return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
