@@ -13,6 +13,7 @@ import com.cos.dao.BoardDAO;
 import com.cos.dto.BoardVO;
 import com.cos.util.MyUtil;
 import com.cos.util.Script;
+import com.cos.websocket.Broadsocket;
 
 public class BoardListAction implements Action{
 	private static String naming = "BoardListAction : ";
@@ -42,6 +43,8 @@ public class BoardListAction implements Action{
 			request.setAttribute("list", list);
 			request.setAttribute("hotPost", hotPost);
 			request.setAttribute("pageNum", pageNum);
+			
+			Broadsocket.serverMessage("메인 페이지 갱신됨");
 			
 			RequestDispatcher dis = request.getRequestDispatcher(url);
 			dis.forward(request, response);
