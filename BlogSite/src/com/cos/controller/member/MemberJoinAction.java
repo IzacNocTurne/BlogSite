@@ -26,9 +26,9 @@ public class MemberJoinAction implements Action{
 		member.setId(request.getParameter("id"));
 		member.setPassword(password);
 		member.setUsername(request.getParameter("username"));
+		member.setRoadFullAddr(request.getParameter("roadFullAddr"));
 		member.setEmail(request.getParameter("email"));
 		member.setSalt(salt);
-		
 		
 		MemberDAO dao = new MemberDAO();
 		int result = dao.insert(member);

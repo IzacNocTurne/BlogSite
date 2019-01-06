@@ -14,6 +14,7 @@ import org.json.simple.parser.JSONParser;
 import com.cos.action.Action;
 import com.cos.dao.ReBoardDAO;
 import com.cos.dto.ReBoardVO;
+import com.cos.util.Script;
 import com.google.gson.Gson;
 
 public class ReBoardReplyAction implements Action{
@@ -40,7 +41,7 @@ public class ReBoardReplyAction implements Action{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		//gson을 이용해서 beans에 담아준다.
 		Gson gson = new Gson();
 		ReBoardVO reboard1 = gson.fromJson(reboardJson.toString(), ReBoardVO.class);
@@ -50,7 +51,7 @@ public class ReBoardReplyAction implements Action{
 		int auto_increment = rdao.select_renum();
 		reboard1.setRenum(auto_increment+1);
 		int result = rdao.insert(reboard1);
-		
+				
 		reboardJson.put("renum", auto_increment+1);
 		
 		//결과 응답해주기

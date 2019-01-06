@@ -25,10 +25,12 @@ public class MemberUpdateProcAction implements Action{
 		String id = request.getParameter("id");		
 		String salt = dao.select_salt(id);
 		String password = SHA256.getEncrypt(request.getParameter("password"), salt);
+		String roadFullAddr = request.getParameter("roadFullAddr");
 		String email = request.getParameter("email");
 		
 		member.setId(id);
 		member.setPassword(password);
+		member.setRoadFullAddr(roadFullAddr);
 		member.setEmail(email);
 		
 		int result = dao.update(member);

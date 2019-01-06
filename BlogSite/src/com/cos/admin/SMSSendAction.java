@@ -27,6 +27,7 @@ public class SMSSendAction implements Action{
 		String id = null;
 		if(session.getAttribute("id") != null){
 			id = (String)session.getAttribute("id");
+			System.out.println("SMS 세션 아이디");
 		}
 		
 		String msg = "";

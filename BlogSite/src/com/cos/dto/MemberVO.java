@@ -4,9 +4,18 @@ public class MemberVO {
 	private String id;
 	private String password;
 	private String username;
+	private String roadFullAddr;
 	private String email;
 	private String salt;
 	private boolean emailcheck;
+	
+	
+	public String getRoadFullAddr() {
+		return roadFullAddr;
+	}
+	public void setRoadFullAddr(String roadFullAddr) {
+		this.roadFullAddr = roadFullAddr;
+	}
 	public boolean isEmailcheck() {
 		return emailcheck;
 	}

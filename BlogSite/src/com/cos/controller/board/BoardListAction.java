@@ -13,7 +13,6 @@ import com.cos.dao.BoardDAO;
 import com.cos.dto.BoardVO;
 import com.cos.util.MyUtil;
 import com.cos.util.Script;
-import com.cos.websocket.Broadsocket;
 
 public class BoardListAction implements Action{
 	private static String naming = "BoardListAction : ";
@@ -40,11 +39,17 @@ public class BoardListAction implements Action{
 				list.get(i).setContent(MyUtil.preview(list.get(i).getContent().replaceAll("/nmap/", "")));
 			}
 			
+			//스크립트 공격 방어
+			for(int i=0; i< list.size(); i++){
+				list.get(i).setTitle(MyUtil.getReplace(list.get(i).getTitle()));
+			}
+			
 			request.setAttribute("list", list);
 			request.setAttribute("hotPost", hotPost);
 			request.setAttribute("pageNum", pageNum);
 			
-			Broadsocket.serverMessage("메인 페이지 갱신됨");
+			//웹소켓 브로드캐스팅 테스트 완료!!
+			//Broadsocket.serverMessage("메인 페이지 갱신됨");
 			
 			RequestDispatcher dis = request.getRequestDispatcher(url);
 			dis.forward(request, response);

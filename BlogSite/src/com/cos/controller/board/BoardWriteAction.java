@@ -1,6 +1,7 @@
 package com.cos.controller.board;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import com.cos.dao.BoardDAO;
 import com.cos.dao.MemberDAO;
 import com.cos.dto.BoardVO;
 import com.cos.util.Script;
+import com.cos.websocket.Broadsocket;
+import com.google.gson.Gson;
 
 public class BoardWriteAction implements Action{
 	private static String naming = "BoardWriteAction : ";

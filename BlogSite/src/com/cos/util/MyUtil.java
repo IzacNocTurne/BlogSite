@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.lang.Character.UnicodeBlock;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +15,23 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
+import com.cos.dto.BoardVO;
+
 public class MyUtil {
 	private static String naming = "MyUtil : ";
+	
+	//HotPost 변경유무 확인 (데이터 조회, 수정, 삭제시 호출됨)
+	public static boolean getBoardChange(ArrayList<BoardVO> hotPost1, ArrayList<BoardVO> hotPost2) {
+		boolean change = false;
+		for(int i=0; i< hotPost1.size(); i++) {
+			if(hotPost1.get(i).getNum() != hotPost2.get(i).getNum()) change = true;
+			if(!hotPost1.get(i).getTitle().equals(hotPost2.get(i).getTitle())) change = true;
+			if(hotPost1.get(i).getReadcount() != hotPost2.get(i).getReadcount()) change = true;
+		}
+		return change;
+	}
+	
+	//쿠키 넣기
 	public static String getMyCookie(HttpServletRequest request) {
 		String cookieID = null;
 
@@ -58,7 +74,7 @@ public class MyUtil {
 		}else{
 			//한줄에 영어만 하면 73줄, 한글로만 하면 50줄!!
 			if(remove_content.length() > 50){
-				remove_content = remove_content.substring(0, 50);
+				remove_content = remove_content.substring(0, 50);	
 			}	
 		}	
 		
@@ -115,24 +131,6 @@ public class MyUtil {
 	    
 	    System.out.println(doc);
 	    return doc.toString();
-	}
-	
-	//지도 검출기 Junit 테스트용
-	@Test
-	public void testNavermap(){
-	    Document doc = Jsoup.parse("<p>첨부할께</p><p>&nbsp;</p><p><span style=\"color: rgb(51, 51, 51); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">/nmap/광서로 16번길/nmap/</span></p><p><span style=\"color: rgb(51, 51, 51); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">&nbsp;</span></p><p><span style=\"color: rgb(51, 51, 51); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">&nbsp;</span></p>");
-	    String remove_content = removeTag(doc.toString());
-	    //System.out.println(remove_content);
-	    
-	    if(remove_content.contains("/nmap/")) {
-	    	String sp[] = remove_content.split("/nmap/");	
-	    	//System.out.println(sp[1]);
-	    	Elements el = doc.getElementsContainingOwnText(sp[1]);
-	    	el.get(el.size() - 1).after(getNavermapHTML(sp[1]));
-	    	//System.out.println(el.get(el.size() - 1));
-	    }
-	    
-	    System.out.println(doc.toString());
 	}
 	
 	//지도 검출기
