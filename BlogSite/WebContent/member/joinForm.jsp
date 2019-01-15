@@ -63,7 +63,7 @@ function jusoCallBack(roadFullAddr){
 								<div id="list"></div>
 								<div id="callBackDiv">
 								<div class="form-group">
-									<label class="form-control-label">Address</label> <button class="btn btn-outline-info float-right" type="button" onclick="goPopup()">Search Korean Address</button> <input class="form-control form-control-lg" type="text" id="roadFullAddr" name="roadFullAddr" maxlength="20" required> 
+									<label class="form-control-label">Address</label> <button class="btn btn-outline-info float-right" type="button" onclick="goPopup()">Search Korean Address</button> <input class="form-control form-control-lg" type="text" id="roadFullAddr" name="roadFullAddr" maxlength="100" required> 
 								</div>
 								</div>
 								<div class="form-group">

@@ -21,7 +21,7 @@
 function goPopup(){
 	// �ּҰ˻��� ������ �˾� �������� ȣ���մϴ�.
 	// ȣ��� ������(jusopopup.jsp)���� ���� �ּҰ˻�URL(http://www.juso.go.kr/addrlink/addrLinkUrl.do)�� ȣ���ϰ� �˴ϴ�.
-	var pop = window.open("/popup/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+	var pop = window.open("/BlogSite/popup/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
 	
 	// ����� ���� ���, ȣ��� ������(jusopopup.jsp)���� ���� �ּҰ˻�URL(http://www.juso.go.kr/addrlink/addrMobileLinkUrl.do)�� ȣ���ϰ� �˴ϴ�.
     //var pop = window.open("/popup/jusoPopup.jsp","pop","scrollbars=yes, resizable=yes"); 
@@ -62,7 +62,7 @@ function jusoCallBack(roadFullAddr){
 							<div id="list"></div>
 							<div id="callBackDiv">
 								<div class="form-group">
-									<label class="form-control-label">Address</label> <button class="btn btn-outline-info float-right" type="button" onclick="goPopup()">Search Korean Address</button> <input class="form-control form-control-lg" type="text" id="roadFullAddr" name="roadFullAddr" value="${member.roadFullAddr}" maxlength="20" required> 
+									<label class="form-control-label">Address</label> <button class="btn btn-outline-info float-right" type="button" onclick="goPopup()">Search Korean Address</button> <input class="form-control form-control-lg" type="text" id="roadFullAddr" name="roadFullAddr" value="${member.roadFullAddr}" maxlength="100" required> 
 								</div>
 								</div>
 							<div class="form-group">
