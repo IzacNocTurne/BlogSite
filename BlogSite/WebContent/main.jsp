@@ -123,7 +123,7 @@
 		var list = document.querySelectorAll('.list-group-item');
 		var hotTitle = document.querySelector('#hotTitle');
 		//var textarea = document.getElementById("messageWindow");
-		var webSocket = new WebSocket('ws://localhost:8080/BlogSite/broadcasting');
+		var webSocket = new WebSocket('ws://localhost:8001/BlogSite/broadcasting');
 		//var inputMessage = document.getElementById('inputMessage');
 		webSocket.onerror = function(event) {
 			onError(event)
