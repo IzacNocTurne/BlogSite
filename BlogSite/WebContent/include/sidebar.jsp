@@ -35,7 +35,7 @@
 			<div class="card my-4">
 				<h5 class="card-header">Banner</h5>
 				<div class="card-body">
-					<a href="http://blog.naver.com/codingspecialist" class="list-group-item list-group-item-action" style="text-align: center;"> <img src="<%=request.getContextPath()%>/img/banner.png" width="80%" height="200px"></img>
+					<a style="text-align: center;"> <img src="<%=request.getContextPath()%>/img/banner.jpg" width="80%" height="200px"></img>
 					</a>
 				</div>
 			</div>
