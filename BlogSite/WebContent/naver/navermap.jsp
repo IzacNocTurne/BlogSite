@@ -28,7 +28,7 @@
 
 	<div class="container">
 		<h2>오시는길</h2>
-		<h6>경기 수원시 팔달구 덕영대로 944</h6>
+		<h6>경기도 성남시 분당구 분당내곡로 117 크래프톤타워</h6>
 	</div>
 
 	<div class="container">
@@ -40,7 +40,7 @@
 					<div id="map" style="width: 100%; height: 400px;"></div>
 					<script>
 						var map = new naver.maps.Map('map');
-						var myaddress = '경기 수원시 팔달구 덕영대로 944';// 도로명 주소나 지번 주소만 가능 (건물명 불가!!!!)
+						var myaddress = '경기도 성남시 분당구 분당내곡로 117 크래프톤타워';// 도로명 주소나 지번 주소만 가능 (건물명 불가!!!!)
 						naver.maps.Service
 								.geocode(
 										{
