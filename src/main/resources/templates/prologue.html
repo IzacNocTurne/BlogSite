@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>프롤로그 - 마이 블로그</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <style>
+        .post-excerpt {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4; /* 4줄 제한 */
+            -webkit-box-orient: vertical;
+            line-height: 1.5;
+            height: 6em; /* line-height * line-clamp */
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
+    <div class="container">
+        <a class="nav-link active fw-semibold d-inline-block me-3" href="/prologue">프롤로그</a>
+        <a class="navbar-brand fw-bold" href="/">마이 블로그</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/category/manage">카테고리 관리</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/post/new">새 게시물 작성</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/admin/stats">관리자 통계</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <h2 class="border-bottom pb-2">프롤로그</h2>
+            <p class="text-muted">블로그의 모든 소식을 한눈에 확인하세요.</p>
+        </div>
+    </div>
+    
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div th:each="post : ${posts}" class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <a th:href="@{/post/{id}(id=${post.id})}" class="text-decoration-none">
+                    <img th:if="${post.imagePath != null}" th:src="@{/uploads/{imagePath}(imagePath=${post.imagePath})}" 
+                         class="card-img-top" alt="게시물 이미지" style="height: 200px; object-fit: cover;">
+                    <div th:if="${post.imagePath == null}" class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <span class="text-muted">이미지 없음</span>
+                    </div>
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">
+                        <a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}" class="text-decoration-none text-dark">게시물 제목</a>
+                    </h5>
+                    <p class="card-text text-muted post-excerpt" th:text="${post.content}">게시물 본문 미리보기 내용이 이곳에 표시됩니다.</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <small class="text-muted" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">2026-03-18</small>
+                        <a th:href="@{/post/{id}(id=${post.id})}" class="btn btn-sm btn-outline-primary">더 보기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer mt-5 py-4 bg-light">
+    <div class="container text-center">
+        <ul class="nav justify-content-center mb-3">
+            <li class="nav-item"><a class="nav-link text-muted" href="/about">소개</a></li>
+            <li class="nav-item"><a class="nav-link text-muted" href="/contact">연락처</a></li>
+            <li class="nav-item"><a class="nav-link text-muted" href="/privacy">개인정보처리방침</a></li>
+        </ul>
+        <div class="text-muted small">
+            &copy; 2026 마이 블로그 | 
+            <span class="ms-2">
+                <a href="/rss" class="text-muted text-decoration-none">RSS 피드</a> | 
+                <a href="/sitemap.xml" class="text-muted text-decoration-none">사이트맵</a>
+            </span>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

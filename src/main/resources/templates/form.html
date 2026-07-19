@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>게시물 작성/수정</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+    <div class="container">
+        <a class="navbar-brand" href="/">마이 블로그</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/category/manage">카테고리 관리</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/post/new">새 게시물 작성</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    카테고리
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:each="category : ${categories}">
+                        <a th:href="@{/category/{id}(id=${category.id})}" th:text="${category.name}" class="text-decoration-none text-dark"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title" th:text="${post.id == null} ? '새 게시물 작성' : '게시물 수정'">게시물 작성</h1>
+                    <form th:action="@{/post}" th:object="${post}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" th:field="*{id}" />
+                        <input type="hidden" th:field="*{createdAt}" />
+                        <div class="mb-3">
+                            <label for="category" class="form-label">카테고리</label>
+                            <select class="form-control" id="category" th:field="*{category}">
+                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="title" class="form-label">제목</label>
+                            <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="author" class="form-label">작성자</label>
+                            <input type="text" class="form-control" id="author" th:field="*{author}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">내용</label>
+                            <textarea class="form-control" id="content" rows="10" th:field="*{content}" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="file" class="form-label">이미지</label>
+                            <input type="file" class="form-control" id="file" name="file">
+                        </div>
+                        <button type="submit" class="btn btn-primary">저장</button>
+                        <a href="/" class="btn btn-secondary">취소</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <ul class="nav justify-content-center">
+            <li class="nav-item"><a class="nav-link" href="/about">소개</a></li>
+            <li class="nav-item"><a class="nav-link" href="/contact">연락처</a></li>
+            <li class="nav-item"><a class="nav-link" href="/privacy">개인정보처리방침</a></li>
+        </ul>
+        <div class="text-center text-muted">
+            &copy; 2026 마이 블로그
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

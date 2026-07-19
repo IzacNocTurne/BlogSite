@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    
+    <!-- 동적 타이틀: 게시글 조회 시에는 글 제목이 먼저 나오도록 함 -->
+    <title th:text="${post != null ? post.title + ' - 마이 블로그' : '마이 블로그'}">마이 블로그</title>
+    
+    <!-- 메타 설명: 게시글 조회 시 본문 내용을 요약하여 사용 -->
+    <meta name="description" th:content="${post != null ? #strings.abbreviate(post.content, 150) : '나의 일상과 정보를 공유하는 마이 블로그입니다.'}">
+    
+    <!-- Open Graph (SNS 공유용) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" th:content="${post != null ? post.title : '마이 블로그'}">
+    <meta property="og:description" th:content="${post != null ? #strings.abbreviate(post.content, 100) : '나의 일상과 정보를 공유하는 마이 블로그입니다.'}">
+    <meta property="og:image" th:content="${post != null and post.imagePath != null ? '/uploads/' + post.imagePath : '/css/default-og-image.png'}">
+    <meta property="og:url" th:content="${#httpServletRequest.requestURL}">
+    
+    <!-- Canonical URL (중복 콘텐츠 방지) -->
+    <link rel="canonical" th:href="${#httpServletRequest.requestURL}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    <div class="container">
+        <a class="nav-link fw-semibold d-inline-block me-3" href="/prologue">프롤로그</a>
+        <a class="navbar-brand fw-bold" href="/">마이 블로그</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/category/manage">카테고리 관리</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/post/new">새 게시물 작성</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/admin/stats">관리자 통계</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- 왼쪽 카테고리 사이드바 -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-dark text-white fw-bold">
+                    카테고리
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item list-group-item-action" th:each="category : ${categories}">
+                        <a th:href="@{/category/{id}(id=${category.id})}" th:text="${category.name}" 
+                           class="text-decoration-none text-dark d-block">카테고리명</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 오른쪽 글 목록 및 최신글 상세 -->
+        <div class="col-md-9">
+            <!-- 상단 게시글 리스트 (페이징 적용) -->
+            <div class="card border-0 shadow-sm mb-5">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="fw-bold mb-0" th:text="${selectedCategory != null ? selectedCategory.name : '전체 글 목록'}">전체 글 목록</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <div th:each="p : ${postsPage.content}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2 px-4"
+                         th:classappend="${post != null and p.id == post.id} ? 'bg-light'">
+                        <a th:href="@{/post/{id}(id=${p.id}, page=${postsPage.number}, categoryId=${selectedCategory != null ? selectedCategory.id : ''})}" 
+                           th:text="${p.title}" class="text-decoration-none text-dark fw-medium">게시물 제목</a>
+                        <small class="text-muted" th:text="${#temporals.format(p.createdAt, 'yyyy-MM-dd')}">2026-03-23</small>
+                    </div>
+                    <div th:if="${postsPage.isEmpty()}" class="list-group-item text-center py-4">
+                        <p class="text-muted mb-0">작성된 게시글이 없습니다.</p>
+                    </div>
+                </div>
+                
+                <!-- 페이징 네비게이션 -->
+                <nav th:if="${postsPage.totalPages > 1}" aria-label="Page navigation" class="mt-3">
+                    <ul class="pagination pagination-sm justify-content-center">
+                        <li class="page-item" th:classappend="${!postsPage.hasPrevious()} ? 'disabled'">
+                            <a class="page-link" th:href="@{${selectedCategory != null ? '/category/' + selectedCategory.id : '/'}(page=${postsPage.number - 1})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo; 이전</span>
+                            </a>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link" th:text="${(postsPage.number + 1) + ' / ' + postsPage.totalPages}">1 / 5</span>
+                        </li>
+                        <li class="page-item" th:classappend="${!postsPage.hasNext()} ? 'disabled'">
+                            <a class="page-link" th:href="@{${selectedCategory != null ? '/category/' + selectedCategory.id : '/'}(page=${postsPage.number + 1})}" aria-label="Next">
+                                <span aria-hidden="true">다음 &raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- 하단 선택된 게시글 상세 내용 -->
+            <div th:if="${post != null}" class="post-detail border rounded bg-white p-4 shadow-sm">
+                <div class="mb-4">
+                    <span class="badge bg-primary mb-2" th:if="${post.category != null}" th:text="${post.category.name}">카테고리</span>
+                    <h2 class="fw-bold mb-3" th:text="${post.title}">게시글 제목</h2>
+                    <div class="text-muted small d-flex align-items-center">
+                        <span th:text="${post.author}">작성자</span>
+                        <span class="mx-2">|</span>
+                        <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">2026-03-23 12:00</span>
+                        <span class="mx-2">|</span>
+                        <span th:text="'조회수 ' + ${post.viewCount}">조회수 0</span>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <div class="post-content">
+                    <div th:if="${post.imagePath != null}" class="mb-4 text-center">
+                        <img th:src="@{/uploads/{path}(path=${post.imagePath})}" class="img-fluid rounded shadow-sm" style="max-height: 500px;" alt="Post Image">
+                    </div>
+                    <div class="content-text" style="line-height: 1.8; white-space: pre-wrap;" th:text="${post.content}">
+                        게시글 본문 내용이 여기에 표시됩니다.
+                    </div>
+                </div>
+                
+                <div sec:authorize="hasRole('ADMIN')" class="mt-5 pt-3 border-top text-end">
+                    <a th:href="@{/post/edit/{id}(id=${post.id})}" class="btn btn-outline-secondary btn-sm">수정</a>
+                    <form th:action="@{/post/delete/{id}(id=${post.id})}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div th:if="${post == null}" class="text-center py-5 border rounded bg-light">
+                <p class="text-muted">보여줄 게시글이 없습니다.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer mt-auto py-4 bg-light">
+    <div class="container text-center">
+        <ul class="nav justify-content-center mb-3">
+            <li class="nav-item"><a class="nav-link text-muted" href="/about">소개</a></li>
+            <li class="nav-item"><a class="nav-link text-muted" href="/contact">연락처</a></li>
+            <li class="nav-item"><a class="nav-link text-muted" href="/privacy">개인정보처리방침</a></li>
+        </ul>
+        <div class="text-muted small">
+            &copy; 2026 마이 블로그 | 
+            <span class="ms-2">
+                <a href="/rss" class="text-muted text-decoration-none">RSS 피드</a> | 
+                <a href="/sitemap.xml" class="text-muted text-decoration-none">사이트맵</a>
+            </span>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
