@@ -27,4 +27,26 @@ public class FileUploadController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
+
+    @GetMapping("/uploads/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveUpload(@PathVariable String filename) {
+        Resource file = storageService.loadAsResource(filename);
+        String contentType = "application/octet-stream";
+        String lower = filename.toLowerCase();
+        if (lower.endsWith(".png")) {
+            contentType = "image/png";
+        } else if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) {
+            contentType = "image/jpeg";
+        } else if (lower.endsWith(".gif")) {
+            contentType = "image/gif";
+        } else if (lower.endsWith(".webp")) {
+            contentType = "image/webp";
+        } else if (lower.endsWith(".svg")) {
+            contentType = "image/svg+xml";
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, contentType)
+                .body(file);
+    }
 }
