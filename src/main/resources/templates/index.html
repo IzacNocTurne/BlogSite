@@ -15,7 +15,7 @@
     <meta property="og:type" content="website">
     <meta property="og:title" th:content="${post != null ? post.title : '마이 블로그'}">
     <meta property="og:description" th:content="${post != null ? #strings.abbreviate(post.content, 100) : '나의 일상과 정보를 공유하는 마이 블로그입니다.'}">
-    <meta property="og:image" th:content="${post != null and post.imagePath != null ? '/uploads/' + post.imagePath : '/css/default-og-image.png'}">
+    <meta property="og:image" th:content="${post != null and post.imagePath != null and post.imagePath != '' ? '/uploads/' + post.imagePath : '/css/default-og-image.png'}">
     <meta property="og:url" th:content="${#httpServletRequest.requestURL}">
     
     <!-- Canonical URL (중복 콘텐츠 방지) -->
@@ -122,7 +122,7 @@
                 <hr class="my-4">
                 
                 <div class="post-content">
-                    <div th:if="${post.imagePath != null}" class="mb-4 text-center">
+                    <div th:if="${post.imagePath != null and post.imagePath != ''}" class="mb-4 text-center">
                         <img th:src="@{/uploads/{path}(path=${post.imagePath})}" class="img-fluid rounded shadow-sm" style="max-height: 500px;" alt="Post Image">
                     </div>
                     <div class="content-text" style="line-height: 1.8; white-space: pre-wrap;" th:text="${post.content}">

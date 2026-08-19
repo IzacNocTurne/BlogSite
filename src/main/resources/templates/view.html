@@ -54,7 +54,7 @@
                     <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">2025-01-01 12:00</span>
                 </div>
                 <hr>
-                <div th:if="${post.imagePath != null}" class="mb-4">
+                <div th:if="${post.imagePath != null and post.imagePath != ''}" class="mb-4">
                     <img th:src="@{/uploads/{imagePath}(imagePath=${post.imagePath})}" class="img-fluid" alt="게시물 이미지">
                 </div>
                 <div th:text="${post.content}" style="white-space: pre-wrap;" class="fs-5">

@@ -1,5 +1,6 @@
 package com.example.blog;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +22,7 @@ public class Post {
 
     private String title;
 
+    @Column(length = 2000)
     private String content;
 
     private String imagePath;

@@ -55,9 +55,9 @@
         <div th:each="post : ${posts}" class="col">
             <div class="card h-100 shadow-sm border-0">
                 <a th:href="@{/post/{id}(id=${post.id})}" class="text-decoration-none">
-                    <img th:if="${post.imagePath != null}" th:src="@{/uploads/{imagePath}(imagePath=${post.imagePath})}" 
+                    <img th:if="${post.imagePath != null and post.imagePath != ''}" th:src="@{/uploads/{imagePath}(imagePath=${post.imagePath})}" 
                          class="card-img-top" alt="게시물 이미지" style="height: 200px; object-fit: cover;">
-                    <div th:if="${post.imagePath == null}" class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <div th:if="${post.imagePath == null or post.imagePath == ''}" class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
                         <span class="text-muted">이미지 없음</span>
                     </div>
                 </a>

@@ -49,6 +49,7 @@
                     <form th:action="@{/post}" th:object="${post}" method="post" enctype="multipart/form-data">
                         <input type="hidden" th:field="*{id}" />
                         <input type="hidden" th:field="*{createdAt}" />
+                        <input type="hidden" th:field="*{imagePath}" />
                         <div class="mb-3">
                             <label for="category" class="form-label">카테고리</label>
                             <select class="form-control" id="category" th:field="*{category}">
@@ -65,10 +66,14 @@
                         </div>
                         <div class="mb-3">
                             <label for="content" class="form-label">내용</label>
-                            <textarea class="form-control" id="content" rows="10" th:field="*{content}" required></textarea>
+                            <textarea class="form-control" id="content" rows="10" th:field="*{content}" maxlength="2000" required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="file" class="form-label">이미지</label>
+                            <div th:if="${post.imagePath != null}" class="mb-2">
+                                <img th:src="@{/uploads/{path}(path=${post.imagePath})}" class="img-thumbnail" style="max-height: 150px;" alt="Current Image">
+                                <span class="text-muted d-block small">현재 등록된 이미지</span>
+                            </div>
                             <input type="file" class="form-control" id="file" name="file">
                         </div>
                         <button type="submit" class="btn btn-primary">저장</button>
