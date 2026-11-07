@@ -9,6 +9,8 @@ Wants=network-online.target
 [Service]
 User=sonth2000
 WorkingDirectory=/home/sonth2000/app
+# ADMIN_PASSWORD 설정 파일 (root만 읽기 가능, 저장소에 올리지 않음)
+EnvironmentFile=-/etc/blog.env
 # 운영 DB는 재부팅 시 비워지는 /tmp가 아니라 ~/data에 있으므로 경로를 반드시 지정합니다.
 # 힙 크기는 e2-micro(메모리 1GB)에 맞춰 제한합니다.
 ExecStart=/usr/bin/java -Xmx384m -jar blog-0.0.1-SNAPSHOT.jar --spring.datasource.url=jdbc:h2:file:/home/sonth2000/data/blogdb

@@ -16,6 +16,11 @@ public class AdminController {
     @Autowired
     private PostService postService;
 
+    @GetMapping({"", "/"})
+    public String index() {
+        return "redirect:/";
+    }
+
     @GetMapping("/stats")
     public String getStats(Model model) {
         List<ReferralStats> referralStats = postService.getReferralStats();

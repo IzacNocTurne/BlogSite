@@ -16,6 +16,12 @@ public class FeedController {
     @Autowired
     private PostRepository postRepository;
 
+    @GetMapping(value = "/robots.txt", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
+    public String getRobots(HttpServletRequest request) {
+        return "User-agent: *\nAllow: /\nSitemap: " + getBaseUrl(request) + "/sitemap.xml\n";
+    }
+
     @GetMapping(value = "/sitemap.xml", produces = MediaType.APPLICATION_XML_VALUE)
     @ResponseBody
     public String getSitemap(HttpServletRequest request) {
@@ -53,9 +59,9 @@ public class FeedController {
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
         sb.append("<rss version=\"2.0\">");
         sb.append("<channel>");
-        sb.append("<title>마이 블로그</title>");
+        sb.append("<title>재건축 정보 분석 블로그</title>");
         sb.append("<link>").append(baseUrl).append("</link>");
-        sb.append("<description>나의 일상과 정보를 공유하는 블로그</description>");
+        sb.append("<description>서울 및 수도권 재건축·재개발 정비사업 정보를 분석하는 블로그</description>");
 
         for (Post post : posts) {
             sb.append("<item>");

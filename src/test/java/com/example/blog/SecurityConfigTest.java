@@ -60,4 +60,20 @@ public class SecurityConfigTest {
         mockMvc.perform(get("/post/new"))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void adminPageShouldBeProtected() throws Exception {
+        // 비인증 상태에서 /admin 접근 시 로그인 페이지(302 Redirect)로 이동해야 함
+        mockMvc.perform(get("/admin"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void adminPageAccessibleByAdminRedirectsHome() throws Exception {
+        // ADMIN 권한으로 /admin 접근 시 홈(/)으로 리다이렉트되어야 함
+        mockMvc.perform(get("/admin"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl("/"));
+    }
 }

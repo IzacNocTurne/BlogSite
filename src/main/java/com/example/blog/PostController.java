@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,6 +22,11 @@ import java.util.List;
 
 @Controller
 public class PostController {
+
+    private static final String DEFAULT_AUTHOR = "관리자";
+    private static final int PAGE_SIZE = 5;
+    // 정렬 순서 안정화 (createdAt, id 둘 다 DESC)
+    private static final Sort LIST_SORT = Sort.by(Sort.Direction.DESC, "createdAt").and(Sort.by(Sort.Direction.DESC, "id"));
 
     @Autowired
     private PostService postService;
@@ -37,27 +45,22 @@ public class PostController {
         return categoryRepository.findAll();
     }
 
+    // 공유 이미지처럼 절대 주소가 필요한 곳에서 사용
+    @ModelAttribute("baseUrl")
+    public String getBaseUrl() {
+        return ServletUriComponentsBuilder.fromCurrentContextPath().toUriString();
+    }
+
     @GetMapping("/category/{id}")
     public String viewByCategory(@PathVariable Integer id, @RequestParam(defaultValue = "0") int page, Model model) {
-        Category category = categoryRepository.findById(id).orElse(null);
-        // 정렬 순서 안정화 (createdAt, id 둘 다 DESC)
-        PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt").and(Sort.by(Sort.Direction.DESC, "id")));
-        
-        if (category != null) {
-            model.addAttribute("postsPage", postRepository.findByCategory(category, pageRequest)); 
-            model.addAttribute("selectedCategory", category);
-        } else {
-            model.addAttribute("postsPage", postRepository.findAll(pageRequest));
-        }
-        
-        // 해당 카테고리의 최신글 한 건 혹은 전체 최신글
-        List<Post> latestPosts;
-        if (category != null) {
-            latestPosts = postRepository.findByCategory(category, PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "createdAt").and(Sort.by(Sort.Direction.DESC, "id")))).getContent();
-        } else {
-            latestPosts = postRepository.findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "createdAt").and(Sort.by(Sort.Direction.DESC, "id")))).getContent();
-        }
-        
+        Category category = categoryRepository.findById(id).orElseThrow(PostController::notFound);
+        Page<Post> postsPage = postRepository.findByCategory(category, listPage(page));
+        requireExistingPage(postsPage);
+        model.addAttribute("postsPage", postsPage);
+        model.addAttribute("selectedCategory", category);
+
+        // 해당 카테고리의 최신글 한 건
+        List<Post> latestPosts = postRepository.findByCategory(category, PageRequest.of(0, 1, LIST_SORT)).getContent();
         if (!latestPosts.isEmpty()) {
             model.addAttribute("post", latestPosts.get(0));
         }
@@ -67,12 +70,12 @@ public class PostController {
 
     @GetMapping("/")
     public String list(@RequestParam(defaultValue = "0") int page, Model model) {
-        PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt").and(Sort.by(Sort.Direction.DESC, "id")));
-        Page<Post> postsPage = postRepository.findAll(pageRequest);
+        Page<Post> postsPage = postRepository.findAll(listPage(page));
+        requireExistingPage(postsPage);
         model.addAttribute("postsPage", postsPage);
-        
+
         // 메인 페이지에서는 가장 최신 게시물을 기본으로 보여줌
-        List<Post> latestPosts = postRepository.findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "createdAt").and(Sort.by(Sort.Direction.DESC, "id")))).getContent();
+        List<Post> latestPosts = postRepository.findAll(PageRequest.of(0, 1, LIST_SORT)).getContent();
         if (!latestPosts.isEmpty()) {
             model.addAttribute("post", latestPosts.get(0));
         }
@@ -86,9 +89,9 @@ public class PostController {
                        @RequestParam(required = false) Integer categoryId,
                        @RequestHeader(value = "Referer", required = false) String referer, 
                        Model model) {
-        // 상단 리스트를 위한 페이징 처리 및 정렬 고정
-        PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt").and(Sort.by(Sort.Direction.DESC, "id")));
-        
+        // 상단 리스트를 위한 페이징 처리 (page 값이 잘못돼도 글 자체는 보여줌)
+        PageRequest pageRequest = listPage(Math.max(page, 0));
+
         Category category = (categoryId != null) ? categoryRepository.findById(categoryId).orElse(null) : null;
         if (category != null) {
             model.addAttribute("postsPage", postRepository.findByCategory(category, pageRequest));
@@ -97,11 +100,10 @@ public class PostController {
             model.addAttribute("postsPage", postRepository.findAll(pageRequest));
         }
 
-        return postService.findById(id).map(post -> {
-            postService.viewPost(post, referer);
-            model.addAttribute("post", post); // 선택된 게시글
-            return "index"; // view 대신 index 사용
-        }).orElse("redirect:/");
+        Post post = postService.findById(id).orElseThrow(PostController::notFound);
+        postService.viewPost(post, referer);
+        model.addAttribute("post", post); // 선택된 게시글
+        return "index"; // view 대신 index 사용
     }
 
     @GetMapping("/prologue")
@@ -113,7 +115,7 @@ public class PostController {
     @GetMapping("/post/new")
     public String newPost(Model model) {
         Post post = new Post();
-        post.setAuthor("Gemini"); // 기본 작성자 설정
+        post.setAuthor(DEFAULT_AUTHOR); // 기본 작성자 설정
         model.addAttribute("post", post);
         return "form";
     }
@@ -125,7 +127,7 @@ public class PostController {
             post.setImagePath(imagePath);
         }
         if (post.getId() == null) { // 새 게시물일 경우
-            post.setAuthor("Gemini");
+            post.setAuthor(DEFAULT_AUTHOR);
             post.setCreatedAt(LocalDateTime.now());
         }
         postService.save(post);
@@ -142,5 +144,22 @@ public class PostController {
     public String delete(@PathVariable Integer id) {
         postService.deleteById(id);
         return "redirect:/";
+    }
+
+    private static PageRequest listPage(int page) {
+        if (page < 0) {
+            throw notFound();
+        }
+        return PageRequest.of(page, PAGE_SIZE, LIST_SORT);
+    }
+
+    private static void requireExistingPage(Page<Post> postsPage) {
+        if (postsPage.getNumber() > 0 && postsPage.isEmpty()) {
+            throw notFound();
+        }
+    }
+
+    private static ResponseStatusException notFound() {
+        return new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }
