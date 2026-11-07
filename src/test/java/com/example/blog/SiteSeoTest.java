@@ -181,6 +181,16 @@ class SiteSeoTest {
     }
 
     @Test
+    void mobileMenuHasLinksForVisitors() throws Exception {
+        for (String path : List.of("/", "/prologue", "/contact")) {
+            mockMvc.perform(get(path))
+                    .andExpect(content().string(containsString("<a class=\"nav-link\" href=\"/about\">")))
+                    .andExpect(content().string(containsString("<a class=\"nav-link\" href=\"/contact\">")))
+                    .andExpect(content().string(containsString("<a class=\"nav-link\" href=\"/privacy\">")));
+        }
+    }
+
+    @Test
     void contactPageShowsRealEmail() throws Exception {
         mockMvc.perform(get("/contact"))
                 .andExpect(content().string(containsString("mailto:sonth2000@gmail.com")))
