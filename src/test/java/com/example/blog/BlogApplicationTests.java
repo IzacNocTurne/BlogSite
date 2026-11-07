@@ -65,18 +65,18 @@ class BlogApplicationTests {
 		category.setName("LimitTestCategory_" + System.currentTimeMillis() + "_" + System.nanoTime());
 		category = categoryRepository.save(category);
 
-		// 2. Save a post with exactly 2000 characters
-		String content2000 = "a".repeat(2000);
+		// 2. Save a post with exactly 20000 characters
+		String content20000 = "a".repeat(20000);
 		Post post = new Post();
-		post.setTitle("Test Post with 2000 characters");
+		post.setTitle("Test Post with 20000 characters");
 		post.setAuthor("TestAuthor");
 		post.setCreatedAt(LocalDateTime.now());
 		post.setCategory(category);
-		post.setContent(content2000);
+		post.setContent(content20000);
 
 		Post savedPost = postRepository.saveAndFlush(post);
 		assertThat(savedPost.getId()).isNotNull();
-		assertThat(savedPost.getContent()).hasSize(2000);
+		assertThat(savedPost.getContent()).hasSize(20000);
 
 		// Clean up the saved post
 		postRepository.delete(savedPost);
@@ -90,18 +90,18 @@ class BlogApplicationTests {
 		category.setName("LimitExceedCategory_" + System.currentTimeMillis() + "_" + System.nanoTime());
 		category = categoryRepository.save(category);
 
-		// 3. Save a post with 2001 characters - should fail due to database column limit
-		String content2001 = "a".repeat(2001);
-		Post post2001 = new Post();
-		post2001.setTitle("Test Post with 2001 characters");
-		post2001.setAuthor("TestAuthor2");
-		post2001.setCreatedAt(LocalDateTime.now());
-		post2001.setCategory(category);
-		post2001.setContent(content2001);
+		// 3. Save a post with 20001 characters - should fail due to database column limit
+		String content20001 = "a".repeat(20001);
+		Post post20001 = new Post();
+		post20001.setTitle("Test Post with 20001 characters");
+		post20001.setAuthor("TestAuthor2");
+		post20001.setCreatedAt(LocalDateTime.now());
+		post20001.setCategory(category);
+		post20001.setContent(content20001);
 
 		// In Spring Boot JPA, flush causes Hibernate to write to DB and throw exception if constraints fail
 		assertThrows(Exception.class, () -> {
-			postRepository.saveAndFlush(post2001);
+			postRepository.saveAndFlush(post20001);
 		});
 	}
 }

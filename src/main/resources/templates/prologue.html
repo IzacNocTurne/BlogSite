@@ -62,7 +62,7 @@
                     <h5 class="card-title fw-bold">
                         <a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}" class="text-decoration-none text-dark">게시물 제목</a>
                     </h5>
-                    <p class="card-text text-muted post-excerpt" th:text="${post.content}">게시물 본문 미리보기 내용이 이곳에 표시됩니다.</p>
+                    <p class="card-text text-muted post-excerpt" th:text="${#strings.abbreviate(post.content, 200)}">게시물 본문 미리보기 내용이 이곳에 표시됩니다.</p>
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <small class="text-muted" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">2026-03-18</small>
                         <a th:href="@{/post/{id}(id=${post.id})}" class="btn btn-sm btn-outline-primary">더 보기</a>

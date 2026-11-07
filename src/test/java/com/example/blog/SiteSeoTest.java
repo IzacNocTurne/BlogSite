@@ -170,6 +170,17 @@ class SiteSeoTest {
     }
 
     @Test
+    void prologueSendsOnlyAnExcerptOfLongPosts() throws Exception {
+        latestPost.setContent("가".repeat(5000));
+        postRepository.save(latestPost);
+
+        mockMvc.perform(get("/prologue"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("가".repeat(100))))
+                .andExpect(content().string(not(containsString("가".repeat(201)))));
+    }
+
+    @Test
     void contactPageShowsRealEmail() throws Exception {
         mockMvc.perform(get("/contact"))
                 .andExpect(content().string(containsString("mailto:sonth2000@gmail.com")))
