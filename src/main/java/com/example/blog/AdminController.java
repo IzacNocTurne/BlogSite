@@ -33,6 +33,7 @@ public class AdminController {
         model.addAttribute("chartData", data);
 
         model.addAttribute("topPosts", postService.getTop5ReferredPosts());
+        model.addAttribute("topViewedPosts", postService.getTopViewedPosts());
         return "admin-stats";
     }
 

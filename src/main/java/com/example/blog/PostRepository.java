@@ -10,4 +10,5 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findByCategory(Category category);
     Page<Post> findByCategory(Category category, Pageable pageable);
     List<Post> findByTitle(String title);
+    List<Post> findTop5ByOrderByViewCountDescIdDesc();
 }
