@@ -32,7 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 class SiteSeoTest {
 
-    private static final String SITE_NAME = "재건축 정보 분석 블로그";
+    private static final String SITE_NAME = "부동산 정보 분석 블로그";
     private static final int POST_COUNT = 6; // 한 페이지(5개)를 넘겨 2페이지가 생기도록 함
 
     @Autowired

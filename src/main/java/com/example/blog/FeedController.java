@@ -59,7 +59,7 @@ public class FeedController {
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
         sb.append("<rss version=\"2.0\">");
         sb.append("<channel>");
-        sb.append("<title>재건축 정보 분석 블로그</title>");
+        sb.append("<title>부동산 정보 분석 블로그</title>");
         sb.append("<link>").append(baseUrl).append("</link>");
         sb.append("<description>서울 및 수도권 재건축·재개발 정비사업 정보를 분석하는 블로그</description>");
 

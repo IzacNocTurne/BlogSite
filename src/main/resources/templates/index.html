@@ -6,14 +6,14 @@
     <meta name="robots" content="index, follow">
     
     <!-- 동적 타이틀: 게시글 조회 시에는 글 제목이 먼저 나오도록 함 -->
-    <title th:text="${post != null ? post.title + ' - 재건축 정보 분석 블로그' : '재건축 정보 분석 블로그'}">재건축 정보 분석 블로그</title>
+    <title th:text="${post != null ? post.title + ' - 부동산 정보 분석 블로그' : '부동산 정보 분석 블로그'}">부동산 정보 분석 블로그</title>
     
     <!-- 메타 설명: 게시글 조회 시 본문 내용을 요약하여 사용 -->
     <meta name="description" th:content="${post != null ? #strings.abbreviate(post.content, 150) : '서울 및 수도권 재건축·재개발 정비사업 정보를 분석하는 블로그입니다.'}">
     
     <!-- Open Graph (SNS 공유용) -->
     <meta property="og:type" content="website">
-    <meta property="og:title" th:content="${post != null ? post.title : '재건축 정보 분석 블로그'}">
+    <meta property="og:title" th:content="${post != null ? post.title : '부동산 정보 분석 블로그'}">
     <meta property="og:description" th:content="${post != null ? #strings.abbreviate(post.content, 100) : '서울 및 수도권 재건축·재개발 정비사업 정보를 분석하는 블로그입니다.'}">
     <meta property="og:image" th:content="${baseUrl + (post != null and post.imagePath != null and post.imagePath != '' ? '/uploads/' + post.imagePath : '/css/default-og-image.png')}">
     <meta property="og:url" th:content="${#httpServletRequest.requestURL}">
@@ -29,7 +29,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container">
         <a class="nav-link fw-semibold d-inline-block me-3" href="/prologue">프롤로그</a>
-        <a class="navbar-brand fw-bold" href="/">재건축 정보 분석 블로그</a>
+        <a class="navbar-brand fw-bold" href="/">부동산 정보 분석 블로그</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -158,7 +158,7 @@
             <li class="nav-item"><a class="nav-link text-muted" href="/privacy">개인정보처리방침</a></li>
         </ul>
         <div class="text-muted small">
-            &copy; 2026 재건축 정보 분석 블로그 | 
+            &copy; 2026 부동산 정보 분석 블로그 | 
             <span class="ms-2">
                 <a href="/rss" class="text-muted text-decoration-none">RSS 피드</a> | 
                 <a href="/sitemap.xml" class="text-muted text-decoration-none">사이트맵</a>
