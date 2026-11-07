@@ -1,0 +1,22 @@
+# 블로그 앱 systemd 서비스 정의
+# 서버의 /etc/systemd/system/blog.service 에 1회 설치합니다. 배포 때 자동으로 복사되지 않으므로
+# 이 파일을 수정하면 서버에도 같은 내용을 반영하고 sudo systemctl daemon-reload 를 실행해야 합니다.
+[Unit]
+Description=Blog Spring Boot Application
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=sonth2000
+WorkingDirectory=/home/sonth2000/app
+# 운영 DB는 재부팅 시 비워지는 /tmp가 아니라 ~/data에 있으므로 경로를 반드시 지정합니다.
+# 힙 크기는 e2-micro(메모리 1GB)에 맞춰 제한합니다.
+ExecStart=/usr/bin/java -Xmx384m -jar blog-0.0.1-SNAPSHOT.jar --spring.datasource.url=jdbc:h2:file:/home/sonth2000/data/blogdb
+SuccessExitStatus=143
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/sonth2000/app/app.log
+StandardError=append:/home/sonth2000/app/app.log
+
+[Install]
+WantedBy=multi-user.target

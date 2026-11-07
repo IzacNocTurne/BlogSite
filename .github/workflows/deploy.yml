@@ -48,32 +48,23 @@ jobs:
         key: ${{ secrets.GCP_VM_SSH_KEY }}
         port: 22
         script: |
+          set -e
           echo "==== Starting deployment on GCP VM ===="
-          cd ~/app
 
-          # 기존 8080 포트를 점유하고 있는 기존 자바 프로세스 확인 및 종료
-          CURRENT_PID=$(lsof -t -i:8080 || true)
-          if [ -z "$CURRENT_PID" ]; then
-            # 포트 검색에 실패할 경우 파일명으로 다시 PID 검색
-            CURRENT_PID=$(pgrep -f "blog-0.0.1-SNAPSHOT.jar" || true)
-          fi
+          # 실행 옵션(DB 경로, 메모리)은 서버에 설치된 blog.service에서 관리합니다. (deploy/blog.service 참고)
+          echo "Restarting blog service..."
+          sudo systemctl restart blog
 
-          if [ ! -z "$CURRENT_PID" ]; then
-            echo "Stopping running Spring Boot application (PID: $CURRENT_PID)..."
-            kill -15 $CURRENT_PID
-            sleep 5
-            # 정상 종료되지 않은 경우 강제 종료
-            if ps -p $CURRENT_PID > /dev/null; then
-              echo "Forcing termination (kill -9) on PID: $CURRENT_PID"
-              kill -9 $CURRENT_PID
+          # 앱이 실제로 응답할 때까지 최대 3분 대기
+          for i in $(seq 1 36); do
+            if curl -fsS -o /dev/null http://localhost:8080/; then
+              echo "Deployment Completed Successfully!"
+              exit 0
             fi
-          else
-            echo "No running application found."
-          fi
+            sleep 5
+          done
 
-          # 신규 JAR 백그라운드 구동 (nohup)
-          # 필요에 따라 로컬 DB 파일 보존 및 GCS 환경 변수를 추가하여 기동할 수 있습니다.
-          echo "Starting the new Spring Boot application..."
-          nohup java -jar blog-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
-
-          echo "Deployment Completed Successfully!"
+          echo "Application did not respond within 3 minutes."
+          sudo systemctl status blog --no-pager || true
+          tail -n 50 ~/app/app.log
+          exit 1
