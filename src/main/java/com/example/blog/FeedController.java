@@ -16,6 +16,9 @@ public class FeedController {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private MarkdownService markdown;
+
     @GetMapping(value = "/robots.txt", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
     public String getRobots(HttpServletRequest request) {
@@ -67,7 +70,7 @@ public class FeedController {
             sb.append("<item>");
             sb.append("<title>").append(escapeXml(post.getTitle())).append("</title>");
             sb.append("<link>").append(baseUrl).append("/post/").append(post.getId()).append("</link>");
-            sb.append("<description>").append(escapeXml(post.getContent())).append("</description>");
+            sb.append("<description>").append(escapeXml(markdown.excerpt(post.getContent(), 300))).append("</description>");
             sb.append("<guid>").append(baseUrl).append("/post/").append(post.getId()).append("</guid>");
             sb.append("</item>");
         }

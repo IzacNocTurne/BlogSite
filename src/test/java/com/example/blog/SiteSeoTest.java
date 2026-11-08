@@ -33,7 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class SiteSeoTest {
 
     private static final String SITE_NAME = "부동산 정보 분석 블로그";
-    private static final int POST_COUNT = 6; // 한 페이지(5개)를 넘겨 2페이지가 생기도록 함
+    private static final int POST_COUNT = 11; // 한 페이지(10개)를 넘겨 2페이지가 생기도록 함
 
     @Autowired
     private MockMvc mockMvc;
@@ -181,13 +181,95 @@ class SiteSeoTest {
     }
 
     @Test
-    void mobileMenuHasLinksForVisitors() throws Exception {
-        for (String path : List.of("/", "/prologue", "/contact")) {
+    void everyPublicPageSharesOneMenu() throws Exception {
+        for (String path : List.of("/", "/prologue", "/about", "/contact", "/privacy",
+                "/category/" + category.getId(), "/post/" + latestPost.getId())) {
             mockMvc.perform(get(path))
-                    .andExpect(content().string(containsString("<a class=\"nav-link\" href=\"/about\">")))
-                    .andExpect(content().string(containsString("<a class=\"nav-link\" href=\"/contact\">")))
-                    .andExpect(content().string(containsString("<a class=\"nav-link\" href=\"/privacy\">")));
+                    .andExpect(content().string(containsString("data-bs-target=\"#navbarNav\"")))
+                    .andExpect(content().string(containsString("bootstrap.bundle.min.js")))
+                    .andExpect(content().string(containsString("href=\"/prologue\">전체 글</a>")))
+                    .andExpect(content().string(containsString("href=\"/about\">소개</a>")))
+                    .andExpect(content().string(containsString("href=\"/contact\">연락처</a>")))
+                    .andExpect(content().string(containsString("href=\"/privacy\">개인정보처리방침</a>")))
+                    .andExpect(content().string(not(containsString("프롤로그"))))
+                    .andExpect(content().string(not(containsString("navbar-dark"))))
+                    .andExpect(content().string(not(containsString("bootstrap@5.3.0"))));
         }
+    }
+
+    @Test
+    void homeListsExcerptsInsteadOfFullLatestPost() throws Exception {
+        latestPost.setContent("## 요약 제목\n\n" + "나".repeat(3000));
+        postRepository.save(latestPost);
+
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("/post/" + latestPost.getId())))
+                .andExpect(content().string(containsString("나".repeat(100))))
+                .andExpect(content().string(not(containsString("나".repeat(161)))))
+                .andExpect(content().string(not(containsString("## 요약"))));
+    }
+
+    @Test
+    void postPageRendersMarkdownSafely() throws Exception {
+        latestPost.setContent(String.join("\n",
+                "■ 옛 방식 소제목",
+                "",
+                "## 사업 개요",
+                "",
+                "**시공사**는 미정입니다.",
+                "",
+                "| 단지 | 단계 |",
+                "|---|---|",
+                "| 1단지 | 조합설립 |",
+                "",
+                "출처: https://news.example.com/a",
+                "",
+                "<script>alert(1)</script>",
+                "[나쁜 링크](javascript:alert(1))",
+                "",
+                "첫째 줄",
+                "둘째 줄"));
+        postRepository.save(latestPost);
+
+        String html = mockMvc.perform(get("/post/" + latestPost.getId()))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        assertThat(html)
+                .contains("<h2>옛 방식 소제목</h2>")
+                .contains("<h2>사업 개요</h2>")
+                .contains("<strong>시공사</strong>")
+                .contains("<td>1단지</td>")
+                .contains("href=\"https://news.example.com/a\"")
+                .contains("rel=\"nofollow noopener noreferrer\"")
+                .contains("첫째 줄<br>")
+                .contains("&lt;script&gt;")
+                .doesNotContain("<script>alert")
+                .doesNotContain("javascript:alert");
+    }
+
+    @Test
+    void postPageShowsBodyBeforeOtherPosts() throws Exception {
+        latestPost.setContent("본문표시확인");
+        postRepository.save(latestPost);
+
+        String html = mockMvc.perform(get("/post/" + latestPost.getId()))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        assertThat(html).contains("SeoTestCategory의 다른 글");
+        assertThat(html.indexOf("class=\"post-content\"")).isPositive().isLessThan(html.indexOf("SeoTestCategory의 다른 글"));
+        assertThat(html).contains("<meta name=\"description\" content=\"본문표시확인\">");
+    }
+
+    @Test
+    void feedUsesPlainTextDescriptions() throws Exception {
+        latestPost.setContent("## 제목\n\n**굵은** 본문");
+        postRepository.save(latestPost);
+
+        mockMvc.perform(get("/rss"))
+                .andExpect(content().string(containsString("<description>제목 굵은 본문</description>")));
     }
 
     @Test

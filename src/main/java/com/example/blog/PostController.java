@@ -19,12 +19,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class PostController {
 
     private static final String DEFAULT_AUTHOR = "관리자";
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 10;
+    private static final int RELATED_COUNT = 5;
     // 정렬 순서 안정화 (createdAt, id 둘 다 DESC)
     private static final Sort LIST_SORT = Sort.by(Sort.Direction.DESC, "createdAt").and(Sort.by(Sort.Direction.DESC, "id"));
 
@@ -58,13 +60,6 @@ public class PostController {
         requireExistingPage(postsPage);
         model.addAttribute("postsPage", postsPage);
         model.addAttribute("selectedCategory", category);
-
-        // 해당 카테고리의 최신글 한 건
-        List<Post> latestPosts = postRepository.findByCategory(category, PageRequest.of(0, 1, LIST_SORT)).getContent();
-        if (!latestPosts.isEmpty()) {
-            model.addAttribute("post", latestPosts.get(0));
-        }
-
         return "index";
     }
 
@@ -73,42 +68,35 @@ public class PostController {
         Page<Post> postsPage = postRepository.findAll(listPage(page));
         requireExistingPage(postsPage);
         model.addAttribute("postsPage", postsPage);
-
-        // 메인 페이지에서는 가장 최신 게시물을 기본으로 보여줌
-        List<Post> latestPosts = postRepository.findAll(PageRequest.of(0, 1, LIST_SORT)).getContent();
-        if (!latestPosts.isEmpty()) {
-            model.addAttribute("post", latestPosts.get(0));
-        }
-        
         return "index";
     }
 
     @GetMapping("/post/{id:[0-9]+}")
-    public String view(@PathVariable Integer id, 
-                       @RequestParam(defaultValue = "0") int page,
-                       @RequestParam(required = false) Integer categoryId,
-                       @RequestHeader(value = "Referer", required = false) String referer, 
+    public String view(@PathVariable Integer id,
+                       @RequestHeader(value = "Referer", required = false) String referer,
                        Model model) {
-        // 상단 리스트를 위한 페이징 처리 (page 값이 잘못돼도 글 자체는 보여줌)
-        PageRequest pageRequest = listPage(Math.max(page, 0));
-
-        Category category = (categoryId != null) ? categoryRepository.findById(categoryId).orElse(null) : null;
-        if (category != null) {
-            model.addAttribute("postsPage", postRepository.findByCategory(category, pageRequest));
-            model.addAttribute("selectedCategory", category);
-        } else {
-            model.addAttribute("postsPage", postRepository.findAll(pageRequest));
-        }
-
         Post post = postService.findById(id).orElseThrow(PostController::notFound);
         postService.viewPost(post, referer);
-        model.addAttribute("post", post); // 선택된 게시글
-        return "index"; // view 대신 index 사용
+        model.addAttribute("post", post);
+        model.addAttribute("relatedPosts", relatedPosts(post));
+        return "post";
+    }
+
+    // 본문 아래에 보여 줄 같은 카테고리(없으면 전체)의 최근 글
+    private List<Post> relatedPosts(Post post) {
+        PageRequest recent = PageRequest.of(0, RELATED_COUNT + 1, LIST_SORT);
+        Page<Post> candidates = post.getCategory() != null
+                ? postRepository.findByCategory(post.getCategory(), recent)
+                : postRepository.findAll(recent);
+        return candidates.getContent().stream()
+                .filter(p -> !p.getId().equals(post.getId()))
+                .limit(RELATED_COUNT)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/prologue")
     public String prologue(Model model) {
-        model.addAttribute("posts", postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt").and(Sort.by(Sort.Direction.DESC, "id"))));
+        model.addAttribute("posts", postRepository.findAll(LIST_SORT));
         return "prologue";
     }
 

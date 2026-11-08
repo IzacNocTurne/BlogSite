@@ -10,11 +10,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-light bg-white border-bottom shadow-sm">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="/">부동산 정보 분석 블로그</a>
-    </div>
-</nav>
+<nav th:replace="~{fragments/layout :: navbar('none')}"></nav>
 
 <div class="container my-5 py-5 text-center">
     <h1 class="h3 fw-bold mb-3" th:text="${status == 404 ? '페이지를 찾을 수 없습니다' : '오류가 발생했습니다'}">오류가 발생했습니다</h1>
@@ -22,16 +18,8 @@
     <a href="/" class="btn btn-primary">홈으로 돌아가기</a>
 </div>
 
-<footer class="footer mt-auto py-4 bg-light">
-    <div class="container text-center">
-        <ul class="nav justify-content-center mb-3">
-            <li class="nav-item"><a class="nav-link text-muted" href="/about">소개</a></li>
-            <li class="nav-item"><a class="nav-link text-muted" href="/contact">연락처</a></li>
-            <li class="nav-item"><a class="nav-link text-muted" href="/privacy">개인정보처리방침</a></li>
-        </ul>
-        <div class="text-muted small">&copy; 2026 부동산 정보 분석 블로그</div>
-    </div>
-</footer>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 
+<script th:replace="~{fragments/layout :: scripts}"></script>
 </body>
 </html>

@@ -9,24 +9,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="/">부동산 정보 분석 블로그</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link" href="/category/manage">카테고리 관리</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link" href="/post/new">새 게시물 작성</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<nav th:replace="~{fragments/layout :: navbar('none')}"></nav>
 
 <div class="container mt-5">
     <div class="row">
@@ -66,7 +49,10 @@
                         </div>
                         <div class="mb-3">
                             <label for="content" class="form-label">내용</label>
-                            <textarea class="form-control" id="content" rows="10" th:field="*{content}" maxlength="20000" required></textarea>
+                            <textarea class="form-control font-monospace" id="content" rows="24" th:field="*{content}" maxlength="20000" required></textarea>
+                            <div class="form-text">
+                                마크다운 서식을 쓸 수 있습니다: <code>## 소제목</code>, <code>**굵게**</code>, <code>- 목록</code>, <code>[링크 글자](https://주소)</code>, 표(<code>| 항목 | 내용 |</code> 다음 줄에 <code>|---|---|</code>). 주소만 적어도 링크가 됩니다.
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="file" class="form-label">이미지</label>
@@ -85,19 +71,7 @@
     </div>
 </div>
 
-<footer class="footer mt-auto py-3 bg-light">
-    <div class="container">
-        <ul class="nav justify-content-center">
-            <li class="nav-item"><a class="nav-link" href="/about">소개</a></li>
-            <li class="nav-item"><a class="nav-link" href="/contact">연락처</a></li>
-            <li class="nav-item"><a class="nav-link" href="/privacy">개인정보처리방침</a></li>
-        </ul>
-        <div class="text-center text-muted">
-            &copy; 2026 부동산 정보 분석 블로그
-        </div>
-    </div>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:replace="~{fragments/layout :: scripts}"></script>
 </body>
 </html>
